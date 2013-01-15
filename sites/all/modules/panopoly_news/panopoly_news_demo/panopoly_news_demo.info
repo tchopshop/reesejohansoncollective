@@ -1,0 +1,27 @@
+name = Panopoly News Demo
+description = Demo content for Panopoly News
+core = 7.x
+package = Panopoly Demos
+php = 5.2.4
+version = 7.x-1.0-dev
+project = panopoly_news_demo
+dependencies[] = defaultcontent
+dependencies[] = features
+dependencies[] = list
+dependencies[] = options
+dependencies[] = panopoly_news
+datestamp = 1344040718
+features[content][] = panopoly-news-demo-0
+features[content][] = panopoly-news-demo-1
+features[content][] = panopoly-news-demo-2
+features[content][] = panopoly-news-demo-3
+features[content][] = panopoly-news-demo-4
+features[content][] = panopoly-news-demo-5
+features[features_api][] = api:1
+
+; Information added by drupal.org packaging script on 2012-11-13
+version = "7.x-1.0-rc2"
+core = "7.x"
+project = "panopoly_news"
+datestamp = "1352771289"
+

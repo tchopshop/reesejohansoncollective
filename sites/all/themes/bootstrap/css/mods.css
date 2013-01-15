@@ -1,0 +1,170 @@
+.page-admin-appearance .controls > .radio:first-child, .controls > .checkbox:first-child {
+padding-top: 0px;
+}
+
+.page-admin-appearance .radio, .page-admin-appearance .checkbox {
+min-height: 0;
+padding-left: 0;
+}
+
+input[type="text"] {
+height: auto;
+}
+
+.page-admin-appearance .radio input[type="radio"], .page-admin-appearance .checkbox input[type="checkbox"], .page-admin-people .radio input[type="radio"], .page-admin-people .checkbox input[type="checkbox"] {
+float: left;
+margin-left: 3px;
+margin-right: 10px;
+}
+
+html.js fieldset.collapsed {
+height: auto;
+}
+
+#module-filter-show-wrapper .form-item {
+display: inline;
+float: left;
+}
+
+.page-admin-modules .radio input[type="radio"], .page-admin-modules .checkbox input[type="checkbox"] {
+float: left;
+margin-left: 0px;
+margin-right: 5px;
+}
+
+div.admin.my-workbench .right {
+margin-right: 0;
+}
+
+div.admin.my-workbench .left {
+margin-left: 0;
+}
+
+#admin-menu .dropdown li {
+line-height: 1.4em;
+}
+
+.help-block {
+	font-size: 12px;
+	line-height: 14px;
+}
+
+tr.admin-menu-tweak-permissions-processed {
+	font-weight: bold;
+	font-size: 18px;
+}
+
+.vertical-tabs .form-type-textfield input {
+width: auto;
+}
+ul.action-links {
+	list-style: none;
+	margin-left: 0;
+	padding-left: 0;
+}
+ul.action-links li {
+  padding-left: 1em;
+  text-indent: -1em;
+}
+/*
+ul.action-links li:before {
+	  content: "+";
+	  font-weight: bold;
+	  font-size: 18px;
+	  padding-right: 10px;
+	  color: #0088cc;
+}
+*/
+html.js fieldset.collapsible div.fieldset-wrapper {
+overflow: visible;
+background: whiteSmoke;
+padding: 10px;
+}
+
+/*
+body {
+padding-top: 20px;
+}
+*/
+
+small {
+	font-size: 70%;
+	font-weight: normal;
+}
+.page-admin-structure-types tr > td:first-child {
+	font-weight: bold;
+}
+.page-admin-structure-types td a {
+	font-weight: normal;
+}
+.description {
+	font-weight: normal;
+	font-size: 85%;
+}
+
+.page-admin-structure-views .label {
+font-size: 12px;
+padding: 0;
+font-weight: inherit;
+line-height: 20px;
+color: #666;
+text-shadow: none;
+white-space: nowrap;
+vertical-align: baseline;
+background-color: transparent;
+}
+.page-admin-structure-views .footer {
+	margin: 0;
+	padding: 4px 0 0;
+}
+.page-admin-structure-views h3 {
+	line-height: normal;
+}
+.page-admin-structure-views .pager {
+margin: 0;
+text-align: left;
+}
+.page-admin-structure-views .pager a {
+display: inline-block;
+padding: 0;
+background-color: transparent;
+border: none;
+-webkit-border-radius: 0;
+-moz-border-radius:0;
+border-radius: 0;
+}
+.page-admin-structure-views .btn-info {
+color: black;
+text-shadow: none;
+background-color: transparent;
+background-image: none;
+border-color: transparent;
+}
+
+form fieldset .formtips-processed, .formtips-processed {
+position: static;
+background-color: #a7d0f7;
+color: #000;
+padding: 7px;
+border: none;
+opacity: 1;
+font-size: inherit;
+line-height: inherit;
+-webkit-border-radius: 4px;
+-moz-border-radius: 4px;
+border-radius: 4px;
+}
+.container-inline {
+	padding-top: 15px;
+}
+.container-inline div {
+display: inline;
+}
+.container-inline .btn {
+	margin-bottom: 10px;
+}
+
+ul.action-links {
+margin-top: -20px;
+margin-bottom: 20px;
+}
