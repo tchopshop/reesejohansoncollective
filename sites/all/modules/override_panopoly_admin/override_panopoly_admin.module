@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Override Panopoly Admin feature.
+ */
+
+include_once 'override_panopoly_admin.features.inc';
