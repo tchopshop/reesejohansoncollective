@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Override Panopoly Users feature.
+ */
+
+include_once 'override_panopoly_users.features.inc';

@@ -1,0 +1,13 @@
+name = Override Panopoly Users
+core = 7.x
+package = Features
+version = 7.x-1.0
+project = override_panopoly_users
+dependencies[] = panopoly_users
+features[features_api][] = api:1
+features[features_override_items][] = field.user-user-field_user_about
+features[features_override_items][] = field.user-user-field_user_picture
+features[features_override_items][] = field_group.group_user_profile|user|user|form
+features[features_overrides][] = field.user-user-field_user_about.field_instance|display|default|settings|linked_field
+features[features_overrides][] = field.user-user-field_user_picture.field_instance|display|default|settings|linked_field
+features[features_overrides][] = field_group.group_user_profile|user|user|form.data|weight

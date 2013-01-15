@@ -1,0 +1,9 @@
+name = Override Panopoly Core
+core = 7.x
+package = Features
+version = 7.x-1.0
+project = override_panopoly_core
+dependencies[] = panopoly_core
+features[features_api][] = api:1
+features[features_override_items][] = field.taxonomy_term-panopoly_categories-field_featured_image
+features[features_overrides][] = field.taxonomy_term-panopoly_categories-field_featured_image.field_instance|display|default|settings|linked_field

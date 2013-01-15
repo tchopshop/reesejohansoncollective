@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Override Panopoly Core feature.
+ */
+
+include_once 'override_panopoly_core.features.inc';

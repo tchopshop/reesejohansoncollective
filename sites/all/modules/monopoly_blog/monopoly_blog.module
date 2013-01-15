@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Monopoly Blog feature.
+ */
+
+include_once 'monopoly_blog.features.inc';
