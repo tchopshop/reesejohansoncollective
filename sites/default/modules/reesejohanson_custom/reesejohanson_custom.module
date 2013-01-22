@@ -1,0 +1,9 @@
+<?php
+/**
+ * @file
+ * Moving code to format the Site name into a module in a multi-site environment re-using the theme.
+ */
+ 
+ function reesejohanson_custom_preprocess_page(&$vars) {
+    $vars['site_name'] = l('<span class="logo-firstpart">' . 'reese johanson ' . '</span><span class="logo-secondpart">' . '(collective)' . '</span>', '<front>', array('html' => TRUE, 'attributes' => array('title' => t('Home page'))));
+}
