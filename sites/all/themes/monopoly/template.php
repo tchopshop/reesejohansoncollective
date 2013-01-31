@@ -64,6 +64,7 @@ function monopoly_process_page(&$vars) {
 // */
 
 
+
 /**
  * Override or insert variables into the node templates.
  */

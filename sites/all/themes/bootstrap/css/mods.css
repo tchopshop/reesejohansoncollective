@@ -165,6 +165,61 @@ display: inline;
 }
 
 ul.action-links {
-margin-top: -20px;
 margin-bottom: 20px;
+}
+
+#site-name, .breadcrumb {
+	display: none;
+}
+
+#modalContent {
+	z-index: 1200!important;
+	top: 100px!important;
+}
+.page-header {
+	margin-top: 0;
+}
+fieldset.form-wrapper {
+	background-color: #E6EBEB;
+	padding: 25px 15px 15px;
+}
+.page-admin-appearance fieldset.form-wrapper {
+	background-color: transparent;
+	padding: 10px;
+}
+
+fieldset.form-wrapper legend {
+	border-bottom: none;
+	position: relative;
+	top: 20px;
+}
+.page-admin-appearance fieldset.form-wrapper legend {
+	border-bottom: none;
+	position: static;
+	top: 0;
+}
+button {
+	margin-top: 15px;
+}
+.container-inline button {
+	margin-top: 0;
+}
+#module-filter-submit {
+	padding: 10px;
+}
+h2 {
+	font-size: 1.5em;
+	line-height: 1em;
+}
+h3 {
+	font-size: 1.3em!important;
+}
+.ctools-collapsible-content {
+	padding-left: 25px;
+}
+.ctools-collapsible-container {
+	margin-bottom: 20px;
+}
+fieldset#edit-font .fieldset-wrapper .fieldset-wrapper {
+padding-top: 0;
 }
