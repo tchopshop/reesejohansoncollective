@@ -55,8 +55,7 @@ function monopoly_process_html(&$vars) {
  */
 
 function monopoly_preprocess_page(&$vars) {
-print $vars['site_name'];
-if ($vars['site_name'] == '<a href="/" title="Home page" class="active">reese johanson (collective)</a>')
+if ($vars['site_name'] == '<a href="/" title="Home page" class="active">reese johanson (collective)</a>' || '<a href="/" title="Home page">reese johanson (collective)</a>')
    {$vars['site_name'] = l('<span class="logo-firstpart">' . 'reese johanson ' . '</span><span class="logo-secondpart">' . '(collective)' . '</span>', '<front>', array('html' => TRUE, 'attributes' => array('title' => t('Home page'))));
 }}
 
