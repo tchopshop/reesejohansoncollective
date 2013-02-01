@@ -2088,3 +2088,5 @@ tr.error {}
   min-height: 260px;
   width: auto;
 }
+
+#toolbar .toolbar-shortcuts ul li {font-family: normal "Lucida Grande", Verdana, sans-serif!important; font-size: 1.4em!important;}
