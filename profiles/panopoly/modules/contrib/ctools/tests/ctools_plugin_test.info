@@ -9,10 +9,9 @@ files[] = css.test
 files[] = context.test
 hidden = TRUE
 
-
-; Information added by drush on 2012-11-12
-version = "7.x-1.2+6-dev"
+; Information added by drupal.org packaging script on 2013-02-02
+version = "7.x-1.2+31-dev"
 core = "7.x"
 project = "ctools"
-datestamp = "1352691833"
+datestamp = "1359766341"
 

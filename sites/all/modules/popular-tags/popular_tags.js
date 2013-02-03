@@ -27,16 +27,16 @@ Drupal.behaviors.popular_tags = {
         var tag_container = field_container.find('.popular-tags');
         var show = tag_container.find('a.show-all-terms');
         var hide = tag_container.find('a.show-popular-terms');
-        show.click(function() {
+        show.click({hide: hide, tag_container: tag_container}, function(ev) {
           $(this).hide();
-          hide.show();
-          tag_container.find('.term').not('.popular').show();
+          ev.data.hide.show();
+          ev.data.tag_container.find('.term').not('.popular').show();
           return false;
         });
-        hide.click(function() {
+        hide.click({show: show, tag_container: tag_container}, function(ev) {
           $(this).hide();
-          show.show();
-          tag_container.find('.term').not('.popular').hide();
+          ev.data.show.show();
+          ev.data.tag_container.find('.term').not('.popular').hide();
           return false;
         });
         hide.click();

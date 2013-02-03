@@ -70,23 +70,19 @@ function _popular_tags_inject(&$element, $context) {
  *   fetched terms
  */
 function _popular_tags_get_terms($vname, $limit = NULL, $all = FALSE) {
-  $sql = <<<__SQL__
-SELECT td.tid 'tid', td.name 'name', COUNT(tn.tid) 'count'
-FROM {taxonomy_term_data} td
-INNER JOIN {taxonomy_vocabulary} tv ON (td.vid = tv.vid)
-LEFT JOIN {taxonomy_index} tn ON (tn.tid = td.tid)
-WHERE tv.name = :vname
-GROUP BY td.tid
-ORDER BY count DESC, name
-__SQL__;
-  $params = array();
-  $params[':vname'] = $vname;
+  $query = db_select('taxonomy_term_data', 'td');
+  $query->fields('td', array('tid', 'name'));
+  $query->innerJoin('taxonomy_vocabulary', 'tv', 'tv.vid = td.vid');
+  $query->leftJoin('taxonomy_index', 'tn', 'tn.tid = td.tid');
+  $query->addExpression('COUNT(tn.tid)', 'count');
+  $query->condition('tv.machine_name', $vname);
+  $query->groupBy('td.tid');
+  $query->orderBy('count', 'DESC');
+  $query->orderBy('name');
   if (!empty($limit) && !$all) {
-    $query = db_query_range($sql, 0, $limit, $params);
+    $query->range(0, $limit);
   }
-  else {
-    $query = db_query($sql, $params);
-  }
-  $terms = $query->fetchAllAssoc('tid');
+
+  $terms = $query->execute()->fetchAllAssoc('tid');
   return $terms;
 }

@@ -6,3 +6,7 @@
 .popular-tags .tag-terms .term {
   margin-right: 0.5em; /* LTR */
 }
+
+.popular-tags .tag-terms .term.popular {
+  font-weight: bold;
+}
