@@ -183,7 +183,27 @@ jQuery.fn.sortElements = (function(){
         }
       }
 
+      function updateComponentCountInfo(item, section) {
+        console.log(section);
+        switch (section) {
+          case 'select':
+            var parent = $(item).closest('.features-export-list').siblings('.features-export-component');
+            $('.component-count', parent).text(function (index, text) {
+                return +text + 1;
+              }
+            );
+            break;
+          case 'added':
+          case 'detected':
+            var parent = $(item).closest('.features-export-component');
+            $('.component-count', parent).text(function (index, text) {
+              return text - 1;
+            });
+        }
+      }
+
       function moveCheckbox(item, section, value) {
+        updateComponentCountInfo(item, section);
         var curParent = item;
         if ($(item).hasClass('form-type-checkbox')) {
           item = $(item).children('input[type=checkbox]');
@@ -353,30 +373,30 @@ jQuery.fn.sortElements = (function(){
         // collapse fieldsets
         var newState = {};
         var currentState = {};
-        $('#features-export-wrapper .component-select label', context).each(function() {
+        $('#features-export-wrapper fieldset.features-export-component', context).each(function() {
           // expand parent fieldset
-          var section = '';
-          $(this).parents('fieldset.features-export-component').each(function() {
-            section = $(this).attr('id');
-            currentState[section] = !($(this).hasClass('collapsed'));
-            if (!(section in newState)) {
-              newState[section] = false;
+          var section = $(this).attr('id');
+          currentState[section] = !($(this).hasClass('collapsed'));
+          if (!(section in newState)) {
+            newState[section] = false;
+          }
+
+          $(this).find('div.component-select label').each(function() {
+            if (filter == '') {
+              if (currentState[section]) {
+                Drupal.toggleFieldset($('#'+section));
+                currentState[section] = false;
+              }
+              $(this).parent().show();
+            }
+            else if ($(this).text().match(regex)) {
+              $(this).parent().show();
+              newState[section] = true;
+            }
+            else {
+              $(this).parent().hide();
             }
           });
-          if (filter == '') {
-            if (currentState[section]) {
-              Drupal.toggleFieldset($('#'+section));
-              currentState[section] = false;
-            }
-            $(this).parent().show();
-          }
-          else if ($(this).text().match(regex)) {
-            $(this).parent().show();
-            newState[section] = true;
-          }
-          else {
-            $(this).parent().hide();
-          }
         });
         for (section in newState) {
           if (currentState[section] != newState[section]) {

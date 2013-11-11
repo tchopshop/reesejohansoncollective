@@ -1,14 +1,14 @@
-name = Masonry
-description = "Makes the 'jQuery Masonry' plugin available to Drupal as a library."
+name = Masonry API
+description = "Provides an API for integrating the jQuery Masonry plugin with Drupal."
 core = 7.x
-package = User interface
+package = Masonry
 
 dependencies[] = libraries (>=2.x)
 
 
-; Information added by drupal.org packaging script on 2012-10-05
-version = "7.x-1.0"
+; Information added by drupal.org packaging script on 2013-10-01
+version = "7.x-2.0+0-dev"
 core = "7.x"
 project = "masonry"
-datestamp = "1349418715"
+datestamp = "1380585967"
 

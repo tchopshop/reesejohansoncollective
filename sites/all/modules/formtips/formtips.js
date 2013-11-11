@@ -5,12 +5,12 @@ Drupal.behaviors.formtips = {
     var settings = Drupal.settings.formtips,
         selectors = $.isArray(settings.selectors) ? settings.selectors.join(', ') : settings.selectors;
 
-    $('.control-group .help-block')
+    $('.form-item .description')
       .not(selectors).not('.formtips-processed')
         .addClass('formtips-processed').each(function(index) {
 
           var description = $(this),
-              item = $(this).closest('.control-group'),
+              item = $(this).closest('.form-item'),
               label = item.find('label:first');
 
           description.hide();

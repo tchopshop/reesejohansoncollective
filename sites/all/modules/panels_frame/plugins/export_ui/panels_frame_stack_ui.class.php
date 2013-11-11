@@ -11,10 +11,10 @@ class panels_frame_stack_ui extends panels_frame_ui {
       'theme callback' => 'ajax_base_page_theme',
     );
 
-    // $op/$cache_mechanism/$cache_key/$name
-    $items['panels_frame/stack/frame/ajax/%/%/%'] = array(
+    // $op/$cache_key/$name
+    $items['panels_frame/stack/frame/ajax/%/%'] = array(
       'page callback' => 'panels_frame_stack_frame_ajax_delegate',
-      'page arguments' => array(4,5,6),
+      'page arguments' => array(4, 5),
     ) + $base;
 
     parent::hook_menu($items);
@@ -23,97 +23,45 @@ class panels_frame_stack_ui extends panels_frame_ui {
   function edit_form(&$form, &$form_state) {
     parent::edit_form($form, $form_state);
 
-    $form['info']['plugin'] = array(
-      '#type' => 'value',
-      '#value' => 'stack',
-    );
-  }
-
-  function edit_form_frames(&$form, &$form_state) {
     ctools_include('stack-admin', 'panels_frame');
     ctools_include('plugins', 'panels');
     ctools_include('ajax');
     ctools_include('modal');
     ctools_modal_add_js();
     ctools_add_css('panels_dnd', 'panels');
+    ctools_add_css('panels-frame.ui-stack', 'panels_frame');
 
-    $cache_mechanism = 'export_ui::' . $form_state['plugin']['name'];
-    $cache_key = $form_state['object']->edit_cache_get_key($form_state['item'], $form_state['form type']);
-
-    // Call out the values that will have no UI here. It will be referenced in
-    // multiple places.
-    $form_state['no_ui'] = array('label', 'identifier', 'layout');
-
-    $form['data'] = array(
-      '#element_validate' => array('panels_frame_stack_ui_frames_sort'),
-      '#after_build' => array('panels_frame_stack_ui_frames_after_build'),
-      '#tree' => TRUE,
-    );
-
-    foreach ($form_state['item']->data as $name => $frame) {
-      foreach ($form_state['no_ui'] as $hidden) {
-        $form['data'][$name][$hidden] = array(
-          '#type' => 'value',
-          '#value' => $frame[$hidden],
-        );
-      }
-
-      // Icon
-      $layout = panels_get_layout($frame['layout']);
-      $form['data'][$name]['icon'] = array(
-        '#markup' => panels_print_layout_icon($layout['name'], $layout),
-      );
-
-      // Display Title
-      $form['data'][$name]['title']['#markup'] = implode('<br />', array(
-        '<strong>' . $frame['label'] . '</strong>',
-        '<em>' . $layout['title'] . '</em>',
-      ));
-
-      // Weight
-      $form['data'][$name]['weight'] = array(
-        '#type' => 'weight',
-        '#default_value' => $frame['weight'],
-        '#attributes' => array('class' => array('panels-frame-stack-frame-weight')),
-      );
-
-      // Operations
-      $operations = array(
-        array(
-          'title' => t('Edit'),
-          'href' => "panels_frame/stack/frame/ajax/edit/$cache_mechanism/$cache_key/$name",
-          'attributes' => array('class' => array('use-ajax')),
-        ),
-        array(
-          'title' => t('Clone'),
-          'href' => "panels_frame/stack/frame/ajax/clone/$cache_mechanism/$cache_key/$name",
-          'attributes' => array('class' => array('use-ajax')),
-        ),
-        array(
-          'title' => t('Delete'),
-          'href' => "panels_frame/stack/frame/ajax/delete/$cache_mechanism/$cache_key/$name",
-          'attributes' => array('class' => array('use-ajax')),
-        ),
-      );
-
-      $form['data'][$name]['operations'] = array(
-        '#theme' => 'links__ctools_dropbutton',
-        '#links' => $operations,
-        '#attributes' => array('class' => array('links', 'inline')),
-      );
+    // Set the cache identifier and immediately set an object cache.
+    $form_state['cache_key'] = panels_frame_cache_key($form_state['item']->name);
+    if (is_object($cache = panels_frame_cache_get('stack', $form_state['cache_key']))) {
+      $form_state['item'] = $cache;
     }
+    panels_frame_cache_set('stack', $form_state['cache_key'], $form_state['item']);
 
-    $form['add'] = array(
-      '#type' => 'submit',
-      '#attributes' => array('class' => array('ctools-use-modal')),
-      '#id' => 'panels-frame-stack-frame-add',
-      '#value' => t('Add frame'),
-    );
+    $form['info']['#type'] = 'container';
+    $form['info']['#attributes']['class'][] = 'stack-admin-info';
 
-    $form['add-url'] = array(
-      '#attributes' => array('class' => array("panels-frame-stack-frame-add-url")),
-      '#type' => 'hidden',
-      '#value' => url("panels_frame/stack/frame/ajax/add/$cache_mechanism/$cache_key", array('absolute' => TRUE)),
+    $form['frames'] = panels_frame_stack_edit_form(array(), $form_state);
+    $form['frames']['#type'] = 'container';
+    $form['frames']['#attributes']['class'][] = 'stack-admin-frames';
+
+    $form['buttons']['#type'] = 'container';
+    $form['buttons']['#attributes']['class'][] = 'stack-admin-buttons';
+
+    $form['info']['plugin'] = array(
+      '#type' => 'value',
+      '#value' => 'stack',
     );
+  }
+
+  function edit_form_submit(&$form, &$form_state) {
+    parent::edit_form_submit($form, $form_state);
+
+    // Ensure that the Stack layout theme exists in the theme registry,
+    // otherwise, rebuild it.
+    $theme_hooks = theme_get_registry();
+    if (!isset($theme_hooks['panels_frame_stack'])) {
+      drupal_theme_rebuild();
+    }
   }
 }

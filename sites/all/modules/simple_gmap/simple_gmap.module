@@ -78,8 +78,8 @@ function simple_gmap_field_formatter_view($entity_type, $entity, $field, $instan
   $link = (int) $display['settings']['include_link'] ? TRUE : FALSE;
   $text = (int) $display['settings']['include_text'] ? TRUE : FALSE;
 
-  $height = $embed ? (int) $display['settings']['iframe_height'] : 1;
-  $width = $embed ? (int) $display['settings']['iframe_width'] : 1;
+  $height = $embed ? check_plain($display['settings']['iframe_height']) : 1;
+  $width = $embed ? check_plain($display['settings']['iframe_width']) : 1;
   $link_text = $link ? check_plain($display['settings']['link_text']) : '';
   $bubble = $display['settings']['information_bubble'] ? TRUE : FALSE;
   $zoom_level = (int) $display['settings']['zoom_level'];
@@ -101,7 +101,8 @@ function simple_gmap_field_formatter_view($entity_type, $entity, $field, $instan
 
   foreach($items as $delta => $item) {
     $url_value = urlencode(check_plain($item['value']));
-    $address = $text ? check_plain($item['value']) : '';
+    $address_value = check_plain($item['value']);
+    $address = $text ? $address_value : '';
 
     $element[$delta] = array('#markup' => theme('simple_gmap_output', array(
           'include_map' => $embed,
@@ -112,7 +113,7 @@ function simple_gmap_field_formatter_view($entity_type, $entity, $field, $instan
           'url_suffix' => $url_value,
           'zoom' => $zoom_level,
           'information_bubble' => $bubble,
-          'link_text' => $link_text,
+          'link_text' => ($link_text == 'use_address') ? $address_value : $link_text,
           'address_text' => $address,
           'map_type' => $map_type,
           'langcode' => $lang_to_use,
@@ -144,13 +145,13 @@ function simple_gmap_field_formatter_settings_form($field, $instance, $view_mode
   $element['iframe_width'] = array(
     '#title' => t('Width of embedded map'),
     '#type' => 'textfield',
-    '#default_value' => (int) $settings['iframe_width'],
+    '#default_value' => check_plain($settings['iframe_width']),
   );
 
   $element['iframe_height'] = array(
     '#title' => t('Height of embedded map'),
     '#type' => 'textfield',
-    '#default_value' => (int) $settings['iframe_height'],
+    '#default_value' => check_plain($settings['iframe_height']),
   );
 
   $element['link_label'] = array(
@@ -168,6 +169,7 @@ function simple_gmap_field_formatter_settings_form($field, $instance, $view_mode
     '#title' => t('Link text'),
     '#type' => 'textfield',
     '#default_value' => check_plain($settings['link_text']),
+    '#description' => t("Enter the text to use for the link to the map, or enter 'use_address' (without the quotes) to use the entered address text as the link text"),
   );
 
   $element['generic_label'] = array(

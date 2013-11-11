@@ -22,7 +22,8 @@
 function popular_tags_form_field_ui_field_edit_form_alter(&$form, &$form_state, $form_id) {
   // Field instance.
   $instance = $form['#instance'];
-  if ($instance['widget']['type'] == 'taxonomy_autocomplete') {
+  if ($instance['widget']['type'] == 'taxonomy_autocomplete' ||
+      $instance['widget']['type'] == 'active_tags_taxonomy_autocomplete') {
     /* If this is a taxonomy_autocomplete widget then add the popular_tags
      * checkbox to the field edit form. We don't have to do anything to save
      * this setting since the form element path is instance/widget/settings/... */
@@ -76,7 +77,9 @@ function popular_tags_form_field_ui_field_edit_form_alter(&$form, &$form_state, 
  *   form element context
  */
 function popular_tags_field_widget_form_alter(&$element, &$form_state, $context) {
-  if ($context['instance']['widget']['type'] == 'taxonomy_autocomplete' && !empty($context['instance']['widget']['settings']['popular_tags']['use'])) {
+  if (($context['instance']['widget']['type'] == 'taxonomy_autocomplete' ||
+       $context['instance']['widget']['type'] == 'active_tags_taxonomy_autocomplete')
+     && !empty($context['instance']['widget']['settings']['popular_tags']['use'])) {
     module_load_include('inc', 'popular_tags', 'popular_tags.widget');
     _popular_tags_inject($element, $context);
   }

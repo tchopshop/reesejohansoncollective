@@ -27,7 +27,9 @@ abstract class panels_frame_ui extends ctools_export_ui {
     // Add a filter element for Category.
     $options = array('all' => t('- All -'));
     foreach ($this->items as $item) {
-      $options[$item->category] = $item->category;
+      if (!empty($item->category)) {
+        $options[$item->category] = $item->category;
+      }
     }
 
     $form['top row']['category'] = array(
@@ -81,7 +83,7 @@ abstract class panels_frame_ui extends ctools_export_ui {
     parent::list_css();
     ctools_add_css('panels-frame.ui', 'panels_frame');
   }
-  
+
   function list_render(&$form_state) {
     $table = array(
       'header' => $this->list_table_header(),
@@ -98,12 +100,13 @@ abstract class panels_frame_ui extends ctools_export_ui {
   function list_sort_options() {
     $options = parent::list_sort_options();
 
-    // Replace option labels with our own.
+    // Replace option labels "title" with "Label"
     $options['disabled'] = t('Enabled, Label');
     $options['label'] = t('Label');
 
-    // Add an additional Category option. It's out of order, but whatev.
-    $options['category'] = t('Category');
+    // Add an additional Category option after the first three options.
+    $category_option = array('category' => t('Category'));
+    array_splice($options, 3, 0, $category_option);
 
     return $options;
   }
@@ -146,5 +149,21 @@ abstract class panels_frame_ui extends ctools_export_ui {
         form_error($form['category'], t('Categories may contain only alphanumerics or spaces.'));
       }
     }
+  }
+
+  function edit_form_submit(&$form, &$form_state) {
+    parent::edit_form_submit($form, $form_state);
+
+    // The frame should be saved to the database now, so we should be able to
+    // remove the object cache.
+    panels_frame_cache_clear($form_state['item']->plugin, $form_state['cache_key']);
+  }
+
+  function delete_form_submit(&$form_state) {
+    parent::delete_form_submit($form_state);
+
+    // Also remove from object cache to keep things tidy.
+    $cache_key = 'edit-' . $form_state['item']->name;
+    panels_frame_cache_clear($form_state['item']->plugin, $cache_key);
   }
 }

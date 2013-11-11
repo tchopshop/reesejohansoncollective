@@ -16,6 +16,7 @@ function menu_icons_uninstall() {
   variable_del('menu_icons_position');
   variable_del('menu_icons_image_style_default');
   variable_del('menu_icons_use_css');
+  variable_del('menu_icons_absolute_links');
 
   // Clean up menu link options.
   // Fetch menu links that we've modified.
@@ -45,4 +46,11 @@ function menu_icons_uninstall() {
 
   // Remove the generated CSS file.
   file_unmanaged_delete('public://css/menu_icons.css');
+}
+
+/**
+ * Keep existing sites using absolute URLS in CSS.
+ */
+function menu_icons_update_7200() {
+  variable_set('menu_icons_absolute_links', TRUE);
 }

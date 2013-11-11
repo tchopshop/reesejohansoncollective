@@ -63,8 +63,8 @@ function panels_frame_schema() {
       'admin_title' => 'label',
       'admin_description' => 'description',
       'api' => array(
-        'owner' => 'panels',
-        'api' => 'layouts',
+        'owner' => 'panels_frame',
+        'api' => 'frames',
         'minimum_version' => 1,
         'current_version' => 1,
       ),
@@ -83,4 +83,15 @@ function panels_frame_update_7001() {
   return t('Flushed caches to cleanse the soul.');
 }
 
+/**
+ * Update any existing object caches for Stacks.
+ */
+function panels_frame_update_7002() {
+  db_update('ctools_object_cache')
+    ->condition('obj', 'ctui_panels_frame_stack_ui')
+    ->expression('name', "CONCAT('edit-', name)")
+    ->fields(array('obj' => 'panels_frame:stack'))
+    ->execute();
 
+  return t('Object cache identifiers updated.');
+}
