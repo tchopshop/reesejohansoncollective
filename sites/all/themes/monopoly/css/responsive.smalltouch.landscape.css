@@ -7,8 +7,70 @@
  *
  * - Read the _README file in this directory, it contains useful help and other information.
  */
+/* Increase the body font size on small devices */
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/responsive\.smalltouch\.landscape\.scss}line{font-family:\0000316}}
+html {
+  font-size: 112.5%;
+}
 
-/* Increase the body font size on small touch devices */
-body {
-  font-size: 100%;
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/responsive\.smalltouch\.landscape\.scss}line{font-family:\0000319}}
+#admin-menu {
+  display: none;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/responsive\.smalltouch\.landscape\.scss}line{font-family:\0000323}}
+.contextual-links-region {
+  position: static;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/responsive\.smalltouch\.landscape\.scss}line{font-family:\0000327}}
+#primary-menu-bar {
+  width: auto;
+  clear: none;
+  margin-top: 5px;
+  position: absolute;
+  z-index: 300;
+  background-color: #FC3902;
+  right: 10px;
+  top: 0;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/responsive\.smalltouch\.landscape\.scss}line{font-family:\0000336}}
+#primary-menu-bar ul {
+  clear: both;
+}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/responsive\.smalltouch\.landscape\.scss}line{font-family:\0000339}}
+#primary-menu-bar ul li a {
+  float: right;
+  padding-bottom: 5px;
+  padding-right: 0;
+  width: 100%;
+  text-align: right;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/responsive\.smalltouch\.landscape\.scss}line{font-family:\0000347}}
+li.menu-1611 a, li.menu-1612 a {
+  width: 20px !important;
+  float: right !important;
+  text-align: right !important;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/responsive\.smalltouch\.landscape\.scss}line{font-family:\0000352}}
+a.at-menu-toggle-button-link {
+  color: white;
+  float: right;
+  right: 0;
+  width: 100%;
+  text-align: right;
+  padding: 3px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/responsive\.smalltouch\.landscape\.scss}line{font-family:\0000361}}
+.logged-in #branding {
+  margin-top: -40px;
+}
+
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/responsive\.smalltouch\.landscape\.scss}line{font-family:\0000366}}
+.view-productions .view-content .views-row {
+  width: 100%;
+  text-align: left;
 }

@@ -2137,6 +2137,7 @@ input[type='text'] {
 		text-align: left;
 		position: relative;
 		width: 31%;
+		margin-right: 2%;
 		}
 	
 	&:after {
@@ -2428,27 +2429,4 @@ a.menu-1611, a.menu-1612 {
   margin-bottom: 30px;
 }
 
-@media (max-width: 480px) {
-  #admin-menu {
-    display: none;
-  }
-
-  .contextual-links-region {
-    position: static;
-  }
-
-  #primary-menu-bar {
-    float: left;
-    width: auto;
-    clear: none;
-    margin-top: 5px;
-    position: absolute;
-    z-index: 300;
-    background-color: black;
-  }
-
-  .logged-in #branding {
-    margin-top: -40px;
-  }
-}
 

@@ -1474,21 +1474,22 @@ input[type='text'] {
   text-align: left;
   position: relative;
   width: 31%;
+  margin-right: 2%;
 }
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032142}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032143}}
 .view-productions .view-content:after {
   content: "";
   display: inline-block;
   width: 100%;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032150}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032151}}
 .views-fluidgrid-item-inner {
   width: 260px;
   margin-bottom: 15px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032155}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032156}}
 .views-fluidgrid-item-inner .ds-1col {
   background-color: #ffffff;
   line-height: 13px;
@@ -1498,31 +1499,31 @@ input[type='text'] {
   padding-right: 15px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032164}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032165}}
 .group-blog-main-image {
   float: left;
   margin-right: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032169}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032170}}
 .label-inline {
   float: left;
   color: silver;
   text-transform: uppercase;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032175}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032176}}
 .label-above {
   color: silver;
   text-transform: uppercase;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032180}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032181}}
 h2 {
   margin-bottom: 5px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032184}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032185}}
 .field-name-post-date {
   color: silver;
   letter-spacing: 1px;
@@ -1531,7 +1532,7 @@ h2 {
   margin-bottom: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032192}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032193}}
 .node-teaser {
   clear: left;
   margin-bottom: 10px;
@@ -1539,12 +1540,12 @@ h2 {
   border-bottom: 1px dotted silver;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032199}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032200}}
 .field-name-field-teaser-summary {
   margin-top: 8px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032203}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032204}}
 textarea {
   display: block;
   width: 90%;
@@ -1561,7 +1562,7 @@ textarea {
   outline: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032219}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032220}}
 .form-type label {
   margin-left: 5px;
   font-size: 14px;
@@ -1569,12 +1570,12 @@ textarea {
   color: #8B999D;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032226}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032227}}
 .form-type-textfield label, .form-type-textarea label {
   display: block;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032230}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032231}}
 .form-submit {
   display: inline-block;
   height: 55px;
@@ -1593,35 +1594,35 @@ textarea {
   padding: 0 15px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032248}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032249}}
 .form-submit:hover {
   background-color: #B61B02;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032252}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032253}}
 .grippie {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032256}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032257}}
 .view-monthly-archive ul, .view-tags ul {
   list-style: none;
   padding-left: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032261}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032262}}
 .view-monthly-archive ul li, .view-tags ul li {
   padding-left: 0;
   margin-left: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032266}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032267}}
 .field-name-field-production-main-image {
   float: left;
   margin: 10px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032271}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032272}}
 .read-more a {
   padding: 5px 10px;
   font-size: .9em;
@@ -1637,23 +1638,23 @@ textarea {
   text-decoration: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032286}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032287}}
 .read-more a:hover {
   background-color: #FC3902;
   color: white;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032291}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032292}}
 .quote {
   font-size: 2.2em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032295}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032296}}
 .quote p {
   margin-bottom: .5em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032299}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032300}}
 .attribution {
   font-family: 'pragmatica-web-condensed',sans-serif;
   font-style: normal;
@@ -1663,38 +1664,38 @@ textarea {
   margin-bottom: 1em;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032308}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032309}}
 .list {
   padding-bottom: 10px;
   margin-bottom: 10px;
   text-indent: 20px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032314}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032315}}
 .list.views-row-last {
   margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: solid 5px #222222;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032320}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032321}}
 .view-blog .views-row {
   margin-bottom: 40px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032324}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032325}}
 .field-name-field-production-artist {
   float: left;
   clear: left;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032329}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032330}}
 #toolbar .toolbar-shortcuts ul li {
   font: normal "Lucida Grande", Verdana, sans-serif !important;
   font-size: 1em !important;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032334}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032335}}
 .view-tags ul li {
   float: left;
   padding: 3px 5px;
@@ -1702,67 +1703,67 @@ textarea {
   border: solid 1px gray;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032341}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032342}}
 a.menu-1611, a.menu-1612 {
   margin-top: -5px;
   width: 20px;
   height: 32px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032347}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032348}}
 .service-links ul {
   padding: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032351}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032352}}
 .service-links ul li {
   list-style: none;
   margin: 0;
   float: left;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032357}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032358}}
 .inline-block {
   display: inline;
   margin-right: 4px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032362}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032363}}
 .field-name-field-tags {
   display: inline-block;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032366}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032367}}
 .label-inline {
   margin-right: 4px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032370}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032371}}
 .field-name-field-reviews-body .label-inline {
   color: white;
   text-transform: lowercase;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032375}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032376}}
 .pager {
   margin-top: 25px;
   background-color: #222;
   padding: 25px 10px 18px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032381}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032382}}
 .freepager-next {
   position: relative;
   top: -25px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032386}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032387}}
 .freepager-previous {
   position: relative;
   top: -25px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032391}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032392}}
 .freepager-next::after {
   content: "";
   display: inline-block;
@@ -1773,7 +1774,7 @@ a.menu-1611, a.menu-1612 {
   top: 25px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032401}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032402}}
 .freepager-previous::before {
   content: "";
   display: inline-block;
@@ -1784,55 +1785,27 @@ a.menu-1611, a.menu-1612 {
   top: 25px;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032411}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032412}}
 .section-performances #page-title, .node-type-performance #page-title {
   display: none;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032415}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032416}}
 .page-performances #page-title {
   display: block;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032419}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032420}}
 .pane-node-field-date h2 {
   margin-top: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032423}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032424}}
 .pane-performance-backlinks-panel-pane-1 {
   margin-bottom: 0;
 }
 
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032427}}
+@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032428}}
 .push-down {
   margin-bottom: 30px;
-}
-
-@media (max-width: 480px) {
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032432}}
-  #admin-menu {
-    display: none;
-  }
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032436}}
-  .contextual-links-region {
-    position: static;
-  }
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032440}}
-  #primary-menu-bar {
-    float: left;
-    width: auto;
-    clear: none;
-    margin-top: 5px;
-    position: absolute;
-    z-index: 300;
-    background-color: black;
-  }
-
-@media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032450}}
-  .logged-in #branding {
-    margin-top: -40px;
-  }
 }
