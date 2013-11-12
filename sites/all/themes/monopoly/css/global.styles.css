@@ -1620,7 +1620,7 @@ textarea {
 .field-name-field-production-main-image {
   float: left;
   min-width: 100%;
-  margin-bottom: 10px;
+  margin: 0 0 10px 0 !important;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032273}}
@@ -1823,6 +1823,7 @@ a.menu-1611, a.menu-1612 {
 .field-name-field-title-sponsor {
   text-transform: uppercase;
   clear: left;
+  margin: 0 0 3px 0 !important;
 }
 
 @media -sass-debug-info{filename{font-family:file\:\/\/\/Users\/elena\/Dropbox\/sites\/reesejohansoncollective\/sites\/all\/themes\/monopoly\/sass\/global\.styles\.scss}line{font-family:\000032444}}
