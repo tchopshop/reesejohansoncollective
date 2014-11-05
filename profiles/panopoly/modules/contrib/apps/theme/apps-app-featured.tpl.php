@@ -6,13 +6,11 @@
       </div>
       <div class="left">
         <h1><?php print $name ?></h1>
-        <?php print drupal_render($rating); ?>
+        <?php if (isset($rating)): ?>
+          <?php print drupal_render($rating); ?>
+        <?php endif; ?>
       </div>
       <div class="app-screenshot"><?php print $screenshot ?><div class="screenshot-shadow"></div></div>
     </div>
   </div>
 </div>
-
-
-
-

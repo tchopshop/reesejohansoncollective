@@ -41,6 +41,13 @@ function panels_style_collapsible_region_settings_form($style_settings) {
  */
 function panels_style_collapsible_pane_settings_form($style_settings) {
   $form = array();
+  $form['pane_title'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Title'),
+    '#description' => t('Title used as clickable text to open / close collapsed region.'),
+    '#required' => TRUE,
+    '#default_value' => (isset($style_settings['pane_title'])) ? $style_settings['pane_title'] : ''
+  ); 
   $form['pane_collapsed'] = array(
     '#type' => 'checkbox',
     '#title' => t('Collapsed by default'),
@@ -86,7 +93,8 @@ function theme_panels_style_collapsible_render_pane($vars) {
   if (empty($content->content)) {
     return;
   }
-  if (!empty($content->title) && $content->content != '') {
+  
+  if (!empty($settings['pane_title'])) {
     ctools_include('collapsible.theme');
 
     if (empty($settings['pane_collapsed'])) {
@@ -95,7 +103,8 @@ function theme_panels_style_collapsible_render_pane($vars) {
     if (is_array($content->content)) {
       $content->content = drupal_render($content->content);
     }
-    $output = theme('panels_style_collapsible', array('handle' => $content->title, 'content' => $content->content, 'collapsed' => $settings['pane_collapsed'], 'pane' => $pane));
+    $title = ctools_context_keyword_substitute($settings['pane_title'], array(), $vars['display']->context);
+    $output = theme('panels_style_collapsible', array('handle' => $title, 'content' => $content->content, 'collapsed' => $settings['pane_collapsed'], 'pane' => $pane));
   }
   else {
     $output = theme('panels_pane', array('content' => $content, 'pane' => $pane, 'display' => $display));
@@ -127,7 +136,7 @@ function theme_panels_style_collapsible($vars) {
     
   $class = $vars['collapsed'] ? ' ctools-collapsed' : '';
   $output = '<div' . $pane_id . ' class="ctools-collapsible-container' . $class . $pane_css . '">';
-  $output .= '<h2 class="pane-title ctools-collapsible-handle">' . check_plain($vars['handle']) . '</h2>';
+  $output .= '<h2 class="pane-title ctools-collapsible-handle">' . $vars['handle'] . '</h2>';
   $output .= '<div class="ctools-collapsible-content">' . $vars['content'] . '</div>';
   $output .= '</div>';
 

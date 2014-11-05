@@ -5,11 +5,12 @@
    */
  Drupal.behaviors.panopolyAdmin = {
    attach: function (context, settings) {
-     var width = $('#node-edit #edit-title').width() - $('#node-edit .form-item-path-alias label').width() - 5;
+     var width = $('#node-edit #edit-title').width() - $('#node-edit .form-item-path-alias label').width() - $('#node-edit .form-item-path-alias .field-prefix').width() - 10;
      $('#node-edit .form-item-path-alias input').css('width', width);
 
      if ($('#node-edit .form-item-body-und-0-value label').html() == 'Body <span class="form-required" title="This field is required.">*</span>') {
-       $('#node-edit .form-item-body-und-0-value label').hide();
+       $('#node-edit .form-item-body-und-0-value label').html('');
+       $('#node-edit .form-item-body-und-0-value label').css('text-align', 'right');
      }
 
      if ($('#node-edit .form-item-field-featured-image-und-0-alt label')) {

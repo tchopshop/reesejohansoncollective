@@ -15,9 +15,11 @@ Drupal.PanelsIPE = {
     $('a.pane-delete:not(.pane-delete-processed)', context)
       .addClass('pane-delete-processed')
       .click(function() {
-        if (confirm('Remove this pane?')) {
+        if (confirm(Drupal.t('Remove this pane?'))) {
           $(this).parents('div.panels-ipe-portlet-wrapper').fadeOut('medium', function() {
+            var $sortable = $(this).closest('.ui-sortable');
             $(this).empty().remove();
+            $sortable.trigger('sortremove');
           });
           $(this).parents('div.panels-ipe-display-container').addClass('changed');
         }
@@ -267,7 +269,7 @@ function DrupalPanelsIPE(cache_key, cfg) {
     $('div.panels-ipe-on').hide();
 
     $('.panels-ipe-editing').removeClass('panels-ipe-editing');
-    $('div.panels-ipe-sort-container', ipe.topParent).sortable("destroy");
+    $('div.panels-ipe-sort-container.ui-sortable', ipe.topParent).sortable("destroy");
   };
 
   this.saveEditing = function() {
@@ -320,7 +322,7 @@ function DrupalPanelsIPE(cache_key, cfg) {
 
   this.createSortContainers = function() {
     $('div.panels-ipe-region', this.topParent).each(function() {
-      $('div.panels-ipe-portlet-marker', this).parent()
+      $(this).children('div.panels-ipe-portlet-marker').parent()
         .wrapInner('<div class="panels-ipe-sort-container" />');
 
       // Move our gadgets outside of the sort container so that sortables
@@ -328,9 +330,6 @@ function DrupalPanelsIPE(cache_key, cfg) {
       $('div.panels-ipe-portlet-static', this).each(function() {
         $(this).prependTo($(this).parent().parent());
       });
-
-      // Also remove the last panel separator.
-      $('div.panel-separator', this).filter(':last').remove();
     });
   }
 
@@ -344,11 +343,19 @@ $(function() {
       Drupal.PanelsIPE.editors[data.key].initEditing(data.data);
       Drupal.PanelsIPE.editors[data.key].lockPath = data.lockPath;
     }
+    Drupal.attachBehaviors();
+
   };
 
   Drupal.ajax.prototype.commands.IPEsetLockState = function(ajax, data, status) {
     if (Drupal.PanelsIPE.editors[data.key]) {
       Drupal.PanelsIPE.editors[data.key].lockPath = data.lockPath;
+    }
+  };
+
+  Drupal.ajax.prototype.commands.addNewPane = function(ajax, data, status) {
+    if (Drupal.PanelsIPE.editors[data.key]) {
+      Drupal.PanelsIPE.editors[data.key].changed = true;
     }
   };
 
@@ -376,12 +383,45 @@ $(function() {
     }
   };
 
+  Drupal.ajax.prototype.commands.insertNewPane = function(ajax, data, status) {
+    IPEContainerSelector = '#panels-ipe-regionid-' + data.regionId + ' div.panels-ipe-sort-container';
+    firstPaneSelector = IPEContainerSelector + ' div.panels-ipe-portlet-wrapper:first';
+    // Insert the new pane before the first existing pane in the region, if
+    // any.
+    if ($(firstPaneSelector).length) {
+      insertData = {
+        'method': 'before',
+        'selector': firstPaneSelector,
+        'data': data.renderedPane,
+        'settings': null
+      }
+      Drupal.ajax.prototype.commands.insert(ajax, insertData, status);
+    }
+    // Else, insert it as a first child of the container. Doing so might fall
+    // outside of the wrapping markup for the style, but it's the best we can
+    // do.
+    else {
+      insertData = {
+        'method': 'prepend',
+        'selector': IPEContainerSelector,
+        'data': data.renderedPane,
+        'settings': null
+      }
+      Drupal.ajax.prototype.commands.insert(ajax, insertData, status);
+    }
+  };
+
   /**
    * Override the eventResponse on ajax.js so we can add a little extra
    * behavior.
    */
   Drupal.ajax.prototype.ipeReplacedEventResponse = Drupal.ajax.prototype.eventResponse;
   Drupal.ajax.prototype.eventResponse = function (element, event) {
+    if (element.ipeCancelThis) {
+      element.ipeCancelThis = null;
+      return false;
+    }
+
     if ($(this.element).attr('id') == 'panels-ipe-cancel') {
       if (!Drupal.PanelsIPE.editors[this.element_settings.ipe_cache_key].cancelEditing()) {
         return false;
@@ -414,7 +454,7 @@ $(function() {
 
   Drupal.ajax.prototype.ipeReplacedBeforeSerialize = Drupal.ajax.prototype.beforeSerialize;
   Drupal.ajax.prototype.beforeSerialize = function (element_settings, options) {
-    if ($(this.element).attr('id') == 'panels-ipe-save') {
+    if ($(this.element).hasClass('panels-ipe-save')) {
       Drupal.PanelsIPE.editors[this.element_settings.ipe_cache_key].saveEditing();
     };
     return this.ipeReplacedBeforeSerialize(element_settings, options);

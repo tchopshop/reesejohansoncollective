@@ -229,7 +229,9 @@ function references_dialog_field_attachable_query($view) {
  * Return an array of supported widgets.
  */
 function references_dialog_widgets() {
-  return module_invoke_all('references_dialog_widgets');
+  $widgets = module_invoke_all('references_dialog_widgets');
+  drupal_alter('references_dialog_widgets', $widgets);
+  return $widgets;
 }
 
 /**
@@ -635,6 +637,14 @@ function references_dialog_references_dialog_entity_admin_paths() {
   if (module_exists('media')) {
     $admin_paths['file'] = array(
       'edit' => 'media/[entity_id]/edit',
+    );
+  }
+
+  // Bean provides add and edit paths for custom entities.
+  if (module_exists('bean')) {
+    $admin_paths['bean'] = array(
+      'add' => 'block/add/[bundle-sanitized]',
+      'edit' => 'block/[entity_id]/edit',
     );
   }
   return $admin_paths;

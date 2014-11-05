@@ -6,7 +6,6 @@ php = 5.2.4
 project = panopoly_search
 dependencies[] = facetapi
 dependencies[] = page_manager
-dependencies[] = panopoly_core
 dependencies[] = search
 dependencies[] = search_api
 dependencies[] = search_api_db
@@ -42,7 +41,7 @@ features[facetapi][] = search_api@node_index:block:status
 features[facetapi][] = search_api@node_index:block:title
 features[facetapi][] = search_api@node_index:block:type
 features[facetapi][] = search_api@node_index:block:url
-features[features_api][] = api:1
+features[features_api][] = api:2
 features[page_manager_pages][] = panopoly_search
 features[search_api_index][] = database_node_index
 features[search_api_index][] = node_index
@@ -55,9 +54,9 @@ features[variable][] = search_api_facets_search_ids
 features[views_view][] = panopoly_database_search
 features[views_view][] = panopoly_search
 
-; Information added by drupal.org packaging script on 2012-11-12
-version = "7.x-1.0-rc3"
+; Information added by Drupal.org packaging script on 2014-10-17
+version = "7.x-1.13"
 core = "7.x"
 project = "panopoly_search"
-datestamp = "1352691211"
+datestamp = "1413563615"
 

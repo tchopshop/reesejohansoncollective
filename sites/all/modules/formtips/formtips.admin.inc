@@ -7,9 +7,7 @@
 /**
  * Admin settings form.
  */
-function formtips_setting_form(&$form) {
-  $form = array();
-
+function formtips_setting_form($form) {
   $form['formtips_trigger_action'] = array(
     '#type' => 'select',
     '#title' => t('Trigger action'),

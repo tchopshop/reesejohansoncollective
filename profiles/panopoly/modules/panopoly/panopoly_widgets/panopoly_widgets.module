@@ -3,6 +3,21 @@
 include_once('panopoly_widgets.features.inc');
 include_once('panopoly_widgets.spotlight.inc');
 
+
+/**
+ * Implements hook_init()
+ */
+function panopoly_widgets_init() {
+  
+  // Load the seven theme CSS for the media browser. This is done
+  // because the seven theme may not be the admin theme, but the
+  // media browser assumes that it is....
+  if (arg(0) == 'media' && arg(1) == 'browser' && $GLOBALS['theme'] != 'seven') {
+    drupal_add_css(drupal_get_path('theme', 'seven') . '/reset.css', array('basename' => 'seven_reset', 'group' => CSS_THEME));
+    drupal_add_css(drupal_get_path('theme', 'seven') . '/style.css', array('basename' => 'seven_style', 'group' => CSS_THEME));
+  }
+}
+
 /**
  * Implements hook_apps_app_info()
  */
@@ -18,41 +33,31 @@ function panopoly_widgets_apps_app_info() {
 function panopoly_widgets_configure_form($form, &$form_state) {
   $form = array();
 
-  $form['panopoly_widgets_spotlight_rotation_time'] = array(
-    '#title' => t('Spotlight Rotation Time'),
-    '#type' => 'textfield',
-    '#required' => TRUE,
-    '#default_value' => variable_get('panopoly_widgets_spotlight_rotation_time', 4),
-    '#description' => t('How many seconds do you want between rotations of the spotlight widget?'),
-  );
-
-  $form['panopoly_widgets_enable_default_content'] = array(
-    '#title' => t('Enable Default Content?'),
-    '#type' => 'select',
-    '#required' => TRUE,
-    '#options' => array(
-      '1' => t('Yes'),
-      '0' => t('No'),
-    ),
-    '#default_value' => variable_get('panopoly_widgets_enable_default_content', 1),
-    '#description' => t('Should we automatically populate panopoly widget fields with sample content?'),
+  $form['panopoly_widgets_spotlight_pause_play_buttons'] = array(
+    '#title' => t('Add pause/play button to all spotlight widgets.'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get('panopoly_widgets_spotlight_pause_play_buttons', 1),
+    '#description' => t('The button will appear under to the slide numbers. Helps with accessibility.'),
   );
 
   return system_settings_form($form);
 }
 
 /**
- * Implements hook_init()
+ * Implements hook_page_build()
  */
-function panopoly_widgets_init() {
-
-  // Include the Spotlight Rotation time setting
-  $rotation_time = 1000 * variable_get('panopoly_widgets_spotlight_rotation_time', 4);
-  $js_variables = array('spotlight_settings' => array('rotation_time' => $rotation_time));
-  drupal_add_js($js_variables, 'setting');
+function panopoly_widgets_page_build(&$page) {
 
   // Add our custom javascript to the footer to override other things.
   drupal_add_js(drupal_get_path('module', 'panopoly_widgets') . '/panopoly-widgets.js', array('scope' => 'footer'));
+
+  // If jquery_update was used to update jQuery UI to version 1.9 or higher
+  // than we need to load a plugin to add the '.rotate' function to the tabs
+  // widget.
+  $jquery_ui = drupal_get_library('system', 'ui');
+  if (version_compare($jquery_ui['version'], '1.9', '>=')) {
+    drupal_add_js(drupal_get_path('module', 'panopoly_widgets') . '/jquery-ui-tabs-rotate.js', array('scope' => 'footer'));
+  }
 }
     
 /**
@@ -62,114 +67,6 @@ function panopoly_widgets_ctools_plugin_directory($module, $plugin) {
   return 'plugins/' . $plugin;
 }
 
-
-/**
- * Implements hook_field_widget_form_alter().
- *
- * Create default values on fieldable_panels_pane fields when appropriate. 
- */
-function panopoly_widgets_field_widget_form_alter(&$element, &$form_state, $context) {
-  // Determine if we should use demo content.
-  $use_default_content = variable_get('panopoly_widgets_enable_default_content', 1);
-  if (!empty($use_default_content) && empty($element['#default_value']) && $context['instance']['entity_type'] == 'fieldable_panels_pane') {
-
-    // Do a switch on field type and set #default_values. Also (conditionally) stuff $form_state values so previews work correctly.
-    switch($context['field']['type']) {
-      case 'text_long':
-        $element['#default_value'] = 'Bok choy potato courgette beet greens squash scallion avocado fennel soko. Radish water chestnut tomato sweet pepper soybean quandong. Sweet pepper collard greens courgette black-eyed pea kohlrabi bunya nuts parsley kakadu plum tomatillo coriander dandelion caulie. Pea sprouts onion chickweed garbanzo plantain cress kakadu plum bamboo shoot celery dandelion. Carrot kohlrabi parsnip lotus root scallion chickpea welsh onion spring onion broccoli rabe broccoli horseradish fennel caulie desert raisin cucumber.';
-        
-        if (array_key_exists('#format', $element)) {
-          $element['#format'] = 'plain_text';
-        }
-
-        if (empty($form_state['values'][$context['field']['field_name']][$context['langcode']][0]['value'])) {
-          $form_state['values'][$context['field']['field_name']][$context['langcode']][0]['value'] = $element['#default_value'];
-          $form_state['values'][$context['field']['field_name']][$context['langcode']][0]['format'] = $element['#format'];
-        }
-
-        break;
-      case 'text_with_summary':
-        $element['#default_value'] = 'Green bean beet greens water spinach bitterleaf dandelion summer purslane plantain. Brussels sprout dulse kohlrabi cabbage napa cabbage winter purslane garlic mustard water spinach tigernut pea asparagus jícama wakame ricebean.';
-
-        if (array_key_exists('#format', $element)) {
-          $element['#format'] = 'plain_text';
-        } 
-
-        if (empty($form_state['values'][$context['field']['field_name']][$context['langcode']][0]['value'])) {
-          $form_state['values'][$context['field']['field_name']][$context['langcode']][0]['value'] = $element['#default_value'];
-          $form_state['values'][$context['field']['field_name']][$context['langcode']][0]['format'] = $element['#format'];
-        } 
-
-        break;
-      case 'text':
-        // Do some special handling for map fields.
-        if ($context['field']['field_name'] == 'field_map_address') {
-          $element['value']['#default_value'] = '717 California Street, San Francisco, California 94108';
-
-          if (empty($form_state['values'][$context['field']['field_name']][$context['langcode']][0]['value'])) {
-            $form_state['values'][$context['field']['field_name']][$context['langcode']][0]['value'] = $element['value']['#default_value'];
-          }
-        }
-        break;
-      case 'tablefield':
-        $values = array(
-          'cell_0_0' => 'Vegetable One',
-          'cell_0_1' => 'Vegeteable Two',
-          'cell_1_0' => 'brussels sprouts',
-          'cell_1_1' => 'cucumber',
-          'cell_2_0' => 'spinach',
-          'cell_2_1' => 'carrots',
-        );
-
-        foreach($values as $key => $value) {
-          $element['tablefield'][$key]['#default_value'] = $value;
-        }
-
-        $values = array(
-          'import' => array(
-            'rebuild_field_basic_table_table_0' => 'Upload CSV',
-            'tablefield_csv_field_basic_table_table_0' => '',
-          ),
-          'rebuild' => array(
-            'count_cols' => '2',
-              'count_rows' => '3',
-              'rebuild' => 'Rebuild Table',
-          ),
-        );
-        if (empty($form_state['values'][$context['field']['field_name']][$context['langcode']][0]['tablefield'])) {
-          $form_state['values'][$context['field']['field_name']][$context['langcode']][0]['tablefield'] = $values;
-        }
-
-        break;
-      case 'panopoly_spotlight':
-        $element['title']['#default_value'] = 'Veggies sunt bona vobis!';
-        $element['link']['#default_value'] = 'http://drupal.org';
-        $element['description']['#default_value'] = 'Kakadu plum cucumber soko prairie turnip cress squash tatsoi nori aubergine asparagus endive dandelion beetroot lettuce broccoli water chestnut brussels sprout.';
-        
-        if (empty($form_state['values'][$context['field']['field_name']][$context['langcode']][0])) {
-          $form_state['values'][$context['field']['field_name']][$context['langcode']][0] = array(
-            'title' => $element['title']['#default_value'],
-            'link' => $element['link']['#default_value'],
-            'description' => $element['description']['#default_value'],
-          );
-        }
-        
-        break;
-      case 'link_field':
-        $element['#default_value'] = array(
-          'title' => 'Kombu collard greens',
-          'url' => 'http://drupal.org',
-        );
-
-        if (empty($form_state['values'][$context['field']['field_name']][$context['langcode']][0])) {
-           $form_state['values'][$context['field']['field_name']][$context['langcode']][0] = $element['#default_value'];
-        }
-        break;
-    }
-  }
-}
-
-
 /**
  * Implementation of hook_ctools_content_subtype_alter()
  */
@@ -177,9 +74,9 @@ function panopoly_widgets_ctools_content_subtype_alter(&$subtype, &$plugin) {
 
   // Modify the menu block plugin to better fit into our UI
   if ($plugin['module'] == 'menu_block' && $subtype['menu_title'] == 'Main menu') {
-    $subtype['category'][0] = 'Custom';
+    $subtype['category'][0] = t('Custom');
     $subtype['top level'] = TRUE;
-    $subtype['title'] = 'Add submenu';
+    $subtype['title'] = t('Add submenu');
     $subtype['icon'] = drupal_get_path('module', 'panopoly_widgets') . '/images/icon_submenu.png';
     $subtype['admin css'] = array(drupal_get_path('module', 'menu_block') . '/menu-block-admin.css');
     $subtype['admin js'] = array(drupal_get_path('module', 'menu_block') . '/menu-block.js');
@@ -187,17 +84,17 @@ function panopoly_widgets_ctools_content_subtype_alter(&$subtype, &$plugin) {
 
   // Modify the general content item to appear in the generic content sidebar area
   if ($plugin['module'] == 'views_content' && $subtype['title'] == 'Piece of Content') {
-    $subtype['category'][0] = 'Custom';
+    $subtype['category'][0] = t('Custom');
     $subtype['top level'] = TRUE;
-    $subtype['title'] = 'Add content item';
+    $subtype['title'] = t('Add content item');
     $subtype['icon'] = drupal_get_path('module', 'panopoly_widgets') . '/images/icon_content_item.png';
   }
 
   // Modify the general content listing to appear in the generic content sidebar area
   if ($plugin['module'] == 'views_content' && $subtype['title'] == 'List of Content') {
-    $subtype['category'][0] = 'Custom';
+    $subtype['category'][0] = t('Custom');
     $subtype['top level'] = TRUE;
-    $subtype['title'] = 'Add content list';
+    $subtype['title'] = t('Add content list');
     $subtype['icon'] = drupal_get_path('module', 'panopoly_widgets') . '/images/icon_content_list.png';
   }
 
@@ -233,8 +130,6 @@ function panopoly_widgets_form_alter(&$form, &$form_state, $form_id) {
     $form['buttons']['#prefix'] = '<div class="menu-block-ctools-buttons">';
 
     // Disable some options since they appear busted or confusing in Menu Block
-    // TODO - http://drupal.org/node/1649112
-    $form['parent_mlid']['#access'] = FALSE;
     $form['sort']['#access'] = FALSE;
   }
 
@@ -256,7 +151,7 @@ function panopoly_widgets_form_alter(&$form, &$form_state, $form_id) {
     $form['widget_settings']['#type'] = 'fieldset';
     $form['widget_settings']['#title'] = t('General Settings');
     $form['title']['#attributes']['placeholder'] = $form['title']['#title'];
-    unset($form['title']['#title']);
+    $form['title']['#title_display'] = 'invisible';
     $form['widget_settings']['title'] = $form['title'];
     unset($form['title']);
 
@@ -269,7 +164,7 @@ function panopoly_widgets_form_alter(&$form, &$form_state, $form_id) {
     $form['reusable']['#type'] = 'fieldset';
     $form['reusable']['#process'] = array('ctools_dependent_process');
     $form['reusable']['#id'] = 'reusable-settings';
-    $form['reusable']['category']['#value'] = 'Reusable Content';
+    $form['reusable']['category']['#value'] = t('Reusable Content');
     $form['reusable']['category']['#type'] = 'value';
     $form['reusable']['admin_description']['#access'] = FALSE;
 
@@ -292,45 +187,6 @@ function panopoly_widgets_form_alter(&$form, &$form_state, $form_id) {
     $form['field_basic_table_table'][LANGUAGE_NONE][0]['tablefield']['rebuild']['count_cols']['#title'] = '';
     $form['field_basic_table_table'][LANGUAGE_NONE][0]['tablefield']['rebuild']['count_rows']['#field_prefix'] = $form['field_basic_table_table'][LANGUAGE_NONE][0]['tablefield']['rebuild']['count_rows']['#title'] . '? ';
     $form['field_basic_table_table'][LANGUAGE_NONE][0]['tablefield']['rebuild']['count_rows']['#title'] = '';
-  }
-
-  if (variable_get('panopoly_widgets_enable_default_content', 1)) {
-    $clicked_button = empty($form_state['clicked_button']['#value']) ? '' : $form_state['clicked_button']['#value'];
-    if ($form_id == 'fieldable_panels_panes_fieldable_panels_pane_content_type_edit_form' && ($clicked_button == 'Update Preview' || ($form_state['op'] == 'add' && empty($form_state['input']['form_build_id'])))) {
-
-      // Quick exclusion of column and row counts from being autosubmited
-      if (!empty($form['field_basic_table_table'])) {
-        $form['field_basic_table_table'][LANGUAGE_NONE][0]['tablefield']['rebuild']['count_cols']['#attributes']['class'][] = 'ctools-auto-submit-exclude';
-        $form['field_basic_table_table'][LANGUAGE_NONE][0]['tablefield']['rebuild']['count_rows']['#attributes']['class'][] = 'ctools-auto-submit-exclude';
-      }
-
-      // Quick modification to get the spotlight to render correctly with preview content
-      if ($form_state['op'] == 'add' && empty($form_state['input']['form_build_id']) && !empty($form_state['field']['field_basic_spotlight_items'])) {
-        $form_state['values']['field_basic_spotlight_items']['und'][0]['fid'] = variable_get('panopoly_widgets_default_spotlight_fid', NULL);
-        $form['field_basic_spotlight_items']['und'][0]['fid']['#default_value'] = variable_get('panopoly_widgets_default_spotlight_fid', NULL);
-      }
-
-      // Quick modification to get the image to render correctly with preview content
-      if ($form_state['op'] == 'add' && empty($form_state['input']['form_build_id']) && !empty($form_state['field']['field_basic_image_image'])) {
-        $form_state['values']['field_basic_image_image'][LANGUAGE_NONE][0]['fid'] = variable_get('panopoly_widgets_default_image_fid', NULL);
-        $form['field_basic_image_image'][LANGUAGE_NONE][0]['#default_value']['fid'] = variable_get('panopoly_widgets_default_image_fid', NULL);
-      }
-
-      // Quick modification to get the file to render correctly with preview content
-      if ($form_state['op'] == 'add' && empty($form_state['input']['form_build_id']) && !empty($form_state['field']['field_basic_file_file'])) {
-        $form_state['values']['field_basic_file_file'][LANGUAGE_NONE][0]['fid'] = variable_get('panopoly_widgets_default_basic_file_fid', NULL);
-        $form_state['values']['field_basic_file_file'][LANGUAGE_NONE][0]['display'] = TRUE;
-        $form['field_basic_file_file'][LANGUAGE_NONE][0]['#default_value']['fid'] = variable_get('panopoly_widgets_default_basic_file_fid', NULL);
-        $form['field_basic_file_file'][LANGUAGE_NONE][0]['#default_value']['display'] = TRUE;
-      }
-
-      // Quick modification to get the video to render correctly with preview content
-      if ($form_state['op'] == 'add' && empty($form_state['input']['form_build_id']) && !empty($form_state['field']['field_video_file'])) {
-        $form_state['values']['field_video_file'][LANGUAGE_NONE][0]['fid'] = variable_get('panopoly_widgets_default_video_fid', NULL);
-        $form_state['values']['field_video_file'][LANGUAGE_NONE][0]['display'] = 1;
-        $form['field_video_file'][LANGUAGE_NONE][0]['#default_value']['fid'] = variable_get('panopoly_widgets_default_video_fid', NULL);
-      } 
-    }
   }
 }
 
@@ -367,6 +223,7 @@ function panopoly_widgets_entity_info_alter(&$entity_info) {
   // Quick links
   $entity_info['fieldable_panels_pane']['bundles']['quick_links'] = array(
     'label' => t('Add links'),
+    'description' => t('Add links'),
     'pane category' => t('Custom'),
     'pane top level' => TRUE,
     'pane icon' => drupal_get_path('module', 'panopoly_widgets') . '/images/icon_link.png',
@@ -381,6 +238,7 @@ function panopoly_widgets_entity_info_alter(&$entity_info) {
   // Basic file
   $entity_info['fieldable_panels_pane']['bundles']['basic_file'] = array(
     'label' => t('Add file'),
+    'description' => t('Add file'),
     'pane category' => t('Custom'),
     'pane top level' => TRUE,
     'pane icon' => drupal_get_path('module', 'panopoly_widgets') . '/images/icon_file.png',
@@ -395,6 +253,7 @@ function panopoly_widgets_entity_info_alter(&$entity_info) {
   // Basic Image
   $entity_info['fieldable_panels_pane']['bundles']['image'] = array(
     'label' => t('Add image'),
+    'description' => t('Add image'),
     'pane category' => t('Custom'),
     'pane top level' => TRUE,
     'pane icon' => drupal_get_path('module', 'panopoly_widgets') . '/images/icon_image.png',
@@ -409,6 +268,7 @@ function panopoly_widgets_entity_info_alter(&$entity_info) {
   // Basic text
   $entity_info['fieldable_panels_pane']['bundles']['text'] = array(
     'label' => t('Add text'),
+    'description' => t('Add text'),
     'pane category' => t('Custom'),
     'pane top level' => TRUE,
     'pane icon' => drupal_get_path('module', 'panopoly_widgets') . '/images/icon_text.png',
@@ -423,6 +283,7 @@ function panopoly_widgets_entity_info_alter(&$entity_info) {
   // Basic Map
   $entity_info['fieldable_panels_pane']['bundles']['map'] = array(
     'label' => t('Add map'),
+    'description' => t('Add map'),
     'pane category' => t('Custom'),
     'pane top level' => TRUE,
     'pane icon' => drupal_get_path('module', 'panopoly_widgets') . '/images/icon_map.png',
@@ -437,6 +298,7 @@ function panopoly_widgets_entity_info_alter(&$entity_info) {
   // Basic table
   $entity_info['fieldable_panels_pane']['bundles']['table'] = array(
     'label' => t('Add table'),
+    'description' => t('Add table'),
     'pane category' => t('Custom'),
     'pane top level' => TRUE,
     'pane icon' => drupal_get_path('module', 'panopoly_widgets') . '/images/icon_table.png',
@@ -451,6 +313,7 @@ function panopoly_widgets_entity_info_alter(&$entity_info) {
   // Basic video
   $entity_info['fieldable_panels_pane']['bundles']['video'] = array(
     'label' => t('Add video'),
+    'description' => t('Add video'),
     'pane category' => t('Custom'),
     'pane top level' => TRUE,
     'pane icon' => drupal_get_path('module', 'panopoly_widgets') . '/images/icon_video.png',
@@ -465,6 +328,7 @@ function panopoly_widgets_entity_info_alter(&$entity_info) {
   // Spotlight
   $entity_info['fieldable_panels_pane']['bundles']['spotlight'] = array(
     'label' => t('Add spotlight'),
+    'description' => t('Add spotlight'),
     'pane category' => t('Custom'),
     'pane top level' => TRUE,
     'pane icon' => drupal_get_path('module', 'panopoly_widgets') . '/images/icon_spotlight.png',
@@ -475,22 +339,6 @@ function panopoly_widgets_entity_info_alter(&$entity_info) {
       'access arguments' => array('administer fieldable panels panes'),
     ),
   );
-  
-  // Existing content.
-  /* TODO - Which is better? FPP implementation of Views??
-  $entity_info['fieldable_panels_pane']['bundles']['existing_content'] = array(
-    'label' => t('Add content item'),
-    'pane category' => t('Custom'),
-    'pane top level' => TRUE,
-    'pane icon' => drupal_get_path('module', 'panopoly_widgets') . '/images/icon_spotlight.png',
-    'admin' => array(
-      'path' => 'admin/structure/fieldable-panels-panes/manage/%fieldable_panels_panes_type',
-      'bundle argument' => 4,
-      'real path' => 'admin/structure/fieldable-panels-panes/manage/existing-content',
-      'access arguments' => array('administer fieldable panels panes'),
-    ),
-  ); 
-  */
 }
 
 /**
@@ -524,6 +372,36 @@ function panopoly_widgets_field_display_fieldable_panels_pane_alter(&$display, $
 }
 
 /**
+ * Implementation of hook_file_default_displays_alter()
+ */
+function panopoly_widgets_file_default_displays_alter(&$default_displays) {
+  // Display the 'Generic file' display on video preview.
+  if (!empty($default_displays['video__preview__file_field_file_default'])) {
+    $default_displays['video__preview__file_field_file_default']->status = FALSE;
+  }
+
+  // Set the default video configuration for videos
+  if (!empty($default_displays['video__default__media_vimeo_video'])) {
+    $default_displays['video__default__media_vimeo_video']->settings['protocol'] = '//';
+  }
+
+  // Set the default image style for videos to be our custom video image style
+  if (!empty($default_displays['video__default__media_vimeo_image'])) {
+    $default_displays['video__default__media_vimeo_image']->settings['image_style'] = 'panopoly_image_video';
+  }
+
+  // Set the teaser image style for videos to be our custom video image style
+  if (!empty($default_displays['video__teaser__media_vimeo_image'])) {
+    $default_displays['video__teaser__media_vimeo_image']->settings['image_style'] = 'panopoly_image_video';
+  }
+
+  // Set the preview image style for videos to be our custom thumbnail image style
+  if (!empty($default_displays['video__preview__media_vimeo_image'])) {
+    $default_displays['video__preview__media_vimeo_image']->settings['image_style'] = 'panopoly_image_thumbnail';
+  }
+}
+
+/**
  * Implementation of hook_file_type_alter()
  *
  * Alters list of file types that can be assigned to a file.
@@ -531,5 +409,19 @@ function panopoly_widgets_field_display_fieldable_panels_pane_alter(&$display, $
 function panopoly_widgets_file_type_alter(&$types, $file) {
   if ($file->filemime == 'video/youtube' || $file->filemime == 'video/vimeo') {
     $types[] = 'video';
+  }
+}
+
+/**
+ * Implements hook_menu_block_tree_alter().
+ *
+ * Updates menu block settings in case of IPE callback magic. This will only
+ * work in limited cases but will be fixed when the page refreshes.
+ */
+function panopoly_widgets_menu_block_tree_alter($tree, $config) {
+  if (arg(0) == 'panels' && arg(1) == 'ajax') {
+    foreach ($tree as $key => $value) {
+      $tree[$key]['link']['in_active_trail'] = TRUE;
+    }
   }
 }

@@ -1,293 +1,465 @@
 <?php
+/**
+ * @file
+ * The page callbacks for the Apps module.
+ */
 
 /**
- * callback list off all apps
+ * Title for the App Server
+ */
+function apps_server_title($server) {
+  return t("@title Apps", array('@title' => $server['title']));
+}
+
+/**
+ * Title for the app detail page
+ */
+function apps_app_title($app) {
+  return t("@title Details", array('@title' => $app['name']));
+}
+
+/**
+ * Verify's token or presents a confirm form.
+ */
+function apps_display_confirm_form($question, $unique) {
+  // Can't easily pass query args to batch, so allow if install next is set to
+  // current page, as we set that.
+  if ((isset($_SESSION['apps_install_next']) && $_SESSION['apps_install_next']  == $_GET['q'])
+    || (isset($_REQUEST['token']) && drupal_valid_token($_REQUEST['token'], $unique))) {
+    return FALSE;
+  }
+  else {
+    $path = array($_GET['q'], array('query' => array('token' => drupal_get_token($unique))));
+    return drupal_get_form('apps_confirm_form', $question, $path);
+  }
+}
+
+/**
+ * Confirms the user wants to do the action.
+ */
+function apps_confirm_form($form, $form_state, $question, $path) {
+  $form['#redirect_path'] = $path;
+  return confirm_form($form, $question, 'admin/apps', t('This action can be undone.'));
+}
+
+/**
+ * Redirects user to same path but with token.
+ */
+function apps_confirm_form_submit($form, &$form_state) {
+  $form_state['redirect'] = $form['#redirect_path'];
+}
+
+/**
+ * Callback for the market page
+ *
+ * If there is only one server, go directly to it. Otherwise, list 'em.
+ */
+function apps_market_page() {
+  apps_include('manifest');
+  $servers = apps_servers();
+
+  // If there is only one, go directly to it
+  if (isset($servers) && count($servers) === 1) {
+    return drupal_goto('admin/apps/' . key($servers));
+  }
+
+  foreach ($servers as &$server) {
+    $server['#theme'] = 'apps_server_item';
+  }
+  return theme('apps_market_page', array('servers' => $servers));
+}
+
+/**
+ * Callback list off all apps
  */
 function apps_install_page($server_name) {
-  apps_include('manifest'); 
+  apps_include('manifest');
   $element = array(
-    '#theme'=> 'apps_install_page',
+    '#theme' => 'apps_install_page',
   );
   //find all apps
   try {
     $apps = apps_apps($server_name, array(), TRUE);
-    $element['apps'] = $apps;
-    $featured_apps = apps_apps($server_name , array('featured' => TRUE)) ;
-    if(!empty($featured_apps)) {
-      $element['featured_app'] = array_pop($featured_apps);
+    if (!empty($apps)) {
+      $element['apps'] = $apps;
+      $featured_apps = apps_apps($server_name , array('featured' => TRUE)) ;
+      if (!empty($featured_apps)) {
+        $element['featured_app'] = array_pop($featured_apps);
+      }
     }
   }
   catch (Exception $e) {
-    drupal_set_message("There was the following error - " . $e->getMessage(), 'warning');
+    drupal_set_message(t("There was the following error: @msg", array('@msg' => $e->getMessage())), 'warning');
   }
-  return $element; 
+  return $element;
 }
 
 /**
- * callback for listing of installed apps
+ * Callback for listing of installed apps
  */
-function apps_manage_page($server_name) {
-  apps_include('manifest'); 
+function apps_manage_page($server) {
+  apps_include('manifest');
   $element = array(
-    '#theme'=> 'apps_manage_page',
+    '#theme' => 'apps_manage_page',
   );
   // find all installed apps
   try {
-    $apps = apps_apps($server_name, array("installed" =>TRUE), TRUE);
+    $apps = apps_apps($server, array("installed" => TRUE), TRUE);
     $element['apps'] = $apps;
   }
   catch (Exception $e) {
-    drupal_set_message("There was the following error - " . $e->getMessage(), 'warning');
+    drupal_set_message(t("There was the following error: @error", array('@error' => $e->getMessage())), 'warning');
   }
   return $element;
 }
 
 /**
- * callback for listing of installed apps
+ * Callback for listing of installed apps that have available updates
  */
-function apps_update_page($server_name) { 
-  apps_include('manifest'); 
-  // find all updateable apps (NOTE: currently this never retruns anything
-  //$apps = apps_apps($server_name, array("updateable" =>TRUE), TRUE);
-  return array(
-    '#theme'=> 'apps_update_page',
-  );
+function apps_update_page($server) {
+  apps_include('manifest');
+  $element = array(
+     '#theme'=> 'apps_update_page',
+   );
+  // find all installed apps
+  try {
+    $apps = apps_apps($server, array("upgradeable" => TRUE), TRUE);
+    $element['apps'] = $apps;
+  }
+  catch (Exception $e) {
+    drupal_set_message(t("There was the following error - @error", array('@error' => $e->getMessage())), 'warning');
+  }
+  return $element;
 }
 
 /**
- * callback for app config page
+ * Callpage for apps catelog page, an .md formatted app listing.
  */
-function apps_app_config_page($server_name, $app_name) {
+function apps_catalog_page($server) {
   apps_include('manifest');
-  $apps = apps_apps($server_name , array('machine_name' => $app_name)) ;
-  $app = $apps[$app_name];
+  drupal_add_http_header('Content-Type', 'text/x-markdown');
+  $render = array(
+    '#theme' => 'apps_catalog_page',
+    '#apps' => apps_apps($server, array(), FALSE),
+    '#server' => $server,
+  );
+  print drupal_render($render);
+}
+
+/**
+ * Callback for app config page
+ */
+function apps_app_config_page($app) {
+  apps_include('manifest');
   $element = array();
-  if(apps_app_callback($app, "demo content enable callback")) {
-    $element[] = drupal_get_form('apps_demo_content_form', $app);
+  if (apps_app_callback($app, "demo content enable callback")) {
+    $element['demo'] = drupal_get_form('apps_demo_content_form', $app);
   }
 
-  // check for a status table
-  if($data_callback = apps_app_callback($app, "status callback")) {
+  // Check for a status table
+  if ($data_callback = apps_app_callback($app, "status callback")) {
     $data = $data_callback();
     $header = isset($data['header']) ? $data['header'] : NULL;
-    $title = isset($data['title']) ? $data['title'] : 'Status';
     $items = isset($data['items']) ? $data['items'] : array();
-    $element[] = array(
+    $element['status'] = array(
       '#type' => 'fieldset',
-      '#title' => 'status',
+      '#title' => t('Status'),
       'table' => apps_app_status_report($items, $header),
     );
   }
-  if($form = apps_app_callback($app, "configure form")) {
-    $element[] =  drupal_get_form($form);
+  if ($form = apps_app_callback($app, "configure form")) {
+    $element['config'] =  drupal_get_form($form);
+  }
+  if (!empty($app['permissions'])) {
+    if (user_access('administer permissions')) {
+      $element['permissions'] = drupal_get_form('apps_admin_permissions', $app);
+    }
+    else {
+      $element['permissions']['#markup'] = t('This app has permissions that can be customized but you currently do not have permission to configure them. Please contact an administrator if this is in error.');
+    }
   }
   return $element;
-  return "$app_name has no configuration";
-}
-function apps_app_config_action_redirect($server_name, $app_name) {
-  apps_include('manifest');
-  $apps = apps_apps($server_name , array('machine_name' => $app_name)) ;
-  $app = $apps[$app_name];
-  drupal_goto(apps_app_page_path($app, 'configure'));
-}
-/**
- * callback for the app detail page
- */
-function apps_app_details_page($server_name, $app_name) {
-  apps_include('manifest');
-  $apps = apps_apps($server_name , array('machine_name' => $app_name)) ;
-  $apps[$app_name]['#theme'] = 'apps_app_page';
-  return $apps[$app_name];
 }
 
 /**
- *  Title for the app detail page
+ * Copy of user_admin_permissions() but for specific permissions.
  */
-function apps_app_title($server_name, $app_name) {
-  apps_include('manifest');
-  $apps = apps_apps($server_name , array('machine_name' => $app_name)) ;
-  return t("{$apps[$app_name]['name']} Details");
-}
+function apps_admin_permissions($form, $form_state, $app) {
+  $form['#app'] = $app;
+  $form['#theme'] = 'user_admin_permissions';
+  // Retrieve role names for columns.
+  $role_names = user_roles();
+  // Fetch permissions for all roles or the one selected role.
+  $role_permissions = user_role_permissions($role_names);
 
-/**
- * callback for the market page
- *
- * This is only used if there is more then one server
- */
-function apps_market_page() {
-   module_load_include("inc", "system", "system.admin");
-   return system_admin_menu_block_page();
-}
+  // Store $role_names for use when saving the data.
+  $form['role_names'] = array(
+    '#type' => 'value',
+    '#value' => $role_names,
+  );
+  $permissions = module_invoke_all('permission');
+  $hide_descriptions = system_admin_compact_mode();
+  $options = array();
 
-/**
- *
- */
-function _apps_app_access($perm, $server_name, $action, $app_name) {
-  apps_include('manifest');
-  try {
-    $apps = apps_apps($server_name , array('machine_name' => $app_name)) ;
-  }
-  catch(Exception $e) {
-    drupal_set_message("There was the following error - " . $e->getMessage(), 'warning');
-    return FALSE;
-  }
-  if(user_access($perm) && isset($apps[$app_name]) ) {
-    if(!$action) {
-      return TRUE;
-    }
-    $app = $apps[$app_name];
-    switch($action) {
-      case FALSE:
-        return TRUE;
-      case 'enable':
-        return ($app['status'] === APPS_DISABLED);
-      case 'disable':
-        return ($app['status'] === APPS_ENABLED);
-      case 'install':
-        return ($app['status'] === APPS_INSTALLABLE);
-      case 'configure-action':
-      case 'configure': 
-        return (bool) apps_app_callback($app, "configure form") || apps_app_callback($app, "demo content enabled callback");
-        //not doing this now for config as it brakes going to config after install
-        // we only want this to show if we are on the configure page
-        return ($_GET['q'] == apps_app_page_path($app, 'configure')) &&
-        (apps_app_callback($app, "configure form") ||apps_app_callback($app, "demo content enabled callback")) ;
-      case 'uninstall': 
-        return ($app['disabled']);
+  foreach ($app['permissions'] as $perm => $default_roles) {
+    if (!empty($permissions[$perm])) {
+      $perm_item = $permissions[$perm];
+      // Fill in default values for the permission.
+      $perm_item += array(
+        'description' => '',
+        'restrict access' => FALSE,
+        'warning' => !empty($perm_item['restrict access']) ? t('Warning: Give to trusted roles only; this permission has security implications.') : '',
+      );
+      $options[$perm] = '';
+      $form['permission'][$perm] = array(
+        '#type' => 'item',
+        '#markup' => $perm_item['title'],
+        '#description' => theme('user_permission_description', array('permission_item' => $perm_item, 'hide' => $hide_descriptions)),
+      );
+      foreach ($role_names as $rid => $name) {
+        // Builds arrays for checked boxes for each role
+        if (isset($role_permissions[$rid][$perm])) {
+          $status[$rid][] = $perm;
+        }
+      }
     }
   }
+
+  // Have to build checkboxes here after checkbox arrays are built
+  foreach ($role_names as $rid => $name) {
+    $form['checkboxes'][$rid] = array(
+      '#type' => 'checkboxes',
+      '#options' => $options,
+      '#default_value' => isset($status[$rid]) ? $status[$rid] : array(),
+      '#attributes' => array('class' => array('rid-' . $rid)),
+    );
+    $form['role_names'][$rid] = array(
+      '#markup' => check_plain($name),
+      '#tree' => TRUE,
+    );
+  }
+
+  $form['actions'] = array('#type' => 'actions');
+  $form['actions']['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Save permissions'),
+    '#submit' => array(
+      'user_admin_permissions_submit',
+    ),
+  );
+  $form['actions']['revert'] = array(
+    '#type' => 'submit',
+    '#value' => t('Revert to defaults'),
+    '#submit' => array(
+      'apps_admin_permissions_revert_submit',
+    ),
+  );
+  $form['#attached']['js'][] = drupal_get_path('module', 'user') . '/user.permissions.js';
+
+  return $form;
 }
 
 /**
- * callback for app install
+ * Reverts the permission to default.
+ */
+function apps_admin_permissions_revert_submit($form, &$form_state) {
+  apps_app_configure_permissions($form['#app']);
+  drupal_set_message(t('The permissions have been reverted.'));
+}
+
+/**
+ * Callback for the app detail page
+ */
+function apps_app_details_page($app) {
+  $app['#theme'] = 'apps_app_page';
+  return $app;
+}
+
+/**
+ * Callback for app install
  * TODO: check to see the app is install able and then install
  * TODO: should goto config page but pass on the current destination
  * NOTE: it is expected that this page would be called with a drupal desination set
  */
-function apps_app_install($server_name, $app_name) {
+function apps_app_install($app) {
+  $token_name = 'install-' . $app['machine_name'];
+  if ($confirm_form = apps_display_confirm_form(t('Are you sure you want to install @name?', array('@name' => $app['name'])), $token_name)) {
+    return $confirm_form;
+  }
   apps_include('installer');
   require_once DRUPAL_ROOT . '/includes/authorize.inc';
-  $action = arg(APPSERVER_BASEPATH_DEPTH + 5);
-  $apps = apps_apps($server_name , array('machine_name' => $app_name)) ;
-  $app = $apps[$app_name];
+  $action = arg(5);
   switch ($action) {
-    case FALSE:
-      $next = apps_app_page_path($app, 'install/install');
-      $_SESSION['apps_install_next'] = $next;
-      apps_download_apps($app);
     case 'install':
-      $next = apps_app_page_path($app, 'enable');
-      $_SESSION['apps_install_next'] = $next;
-      $form = apps_install_downloads(); 
-      if ($form) {
-        return $form;
-      }
-  }
-  return "";
-}
-
-
-function apps_app_page_path($app, $type = '') {
-  if (isset($app['machine_name'])) {
-    return APPSERVER_BASEPATH . "/{$app['server']['name']}/app/{$app['machine_name']}/$type";
+      $_SESSION['apps_install_next'] = apps_app_page_path($app, 'enable');
+      return apps_install_downloads();
+    default:
+      // Clear cache so downloads new files.
+      apps_clear_update_disk_cache();
+      // Adds an extra path element to avoid an endless loop. If we check for
+      // install at arg(4) we are usually there. So here we add an install at
+      // arg(5) and that will get caught in the case above ^-^
+      $_SESSION['apps_install_next'] = apps_app_page_path($app, 'install/install');
+      apps_download_apps($app);
+      break;
   }
 }
 
 /**
- * callback for the enable action
+ * Callback for the enable action
  *
  * Enables the app and got to config page if it exists
  */
-function apps_app_enable($server_name, $app_name) {
-  $apps = apps_apps($server_name , array('machine_name' => $app_name)) ;
-  $app = $apps[$app_name];
+function apps_app_enable($app) {
+  $token_name = 'enable-' . $app['machine_name'];
+  if ($confirm_form = apps_display_confirm_form(t('Are you sure you want to enable @name?', array('@name' => $app['name'])), $token_name)) {
+    return $confirm_form;
+  }
   $next = apps_app_page_path($app, 'configure');
   $success = module_enable(array($app['machine_name']), TRUE);
   if ($success) {
     drupal_flush_all_caches();
-    drupal_set_message("Enabled {$app['name']} app");
-    drupal_set_message(t("Please go to !homelink to see the new app in action. ", 
-			array('!homelink' => l("the home page", "<front>")))
-		      );
+    drupal_set_message(t("Enabled @name app", array('@name' => $app['name'])));
     if (!$app['disabled'] && ($cb = apps_app_callback($app, "post install callback"))) {
       $cb($app);
     }
-    if(!_apps_app_access('administer apps', $server_name, 'configure', $app_name)) {
-      $next = apps_app_page_path($app, '');
+    if (!apps_app_access('administer apps', $app, 'configure')) {
+      $next = apps_app_page_path($app);
     }
   }
   else {
-    drupal_set_message("{$app['name']} App Not Enabled");
-    $next = apps_app_page_path($app, '');
+    drupal_set_message(t("@name App Not Enabled", array('@name' => $app['name'])));
+    $next = apps_app_page_path($app);
   }
   drupal_goto($next);
 }
 
 /**
- * callback for app disable
+ * Callback for app disable
  */
-function apps_app_disable($server_name, $app_name) {
-  $apps = apps_apps($server_name , array('machine_name' => $app_name)) ;
-  $app = $apps[$app_name];
-  //force the user to disable demo content before disabling the app
+function apps_app_disable($app) {
+  $token_name = 'disable-' . $app['machine_name'];
+  if ($confirm_form = apps_display_confirm_form(t('Are you sure you want to disable @name?', array('@name' => $app['name'])), $token_name)) {
+    return $confirm_form;
+  }
+  // Force the user to disable demo content before disabling the app
   if (($is_cb = apps_app_callback($app, "demo content enabled callback")) &&
     $is_cb($app)) {
     $next = apps_app_page_path($app, 'configure');
-    drupal_set_message("Please disable demo content before disabling the app");
+    drupal_set_message(t("Please disable demo content before disabling the app"));
     drupal_goto($next);
   }
 
-  $success = module_disable(array($app['machine_name']));
+  module_disable(array($app['machine_name']));
   drupal_flush_all_caches();
-  drupal_set_message("Disabled {$app['name']} app");
-  $next = apps_app_page_path($app, '');
+  drupal_set_message(t("Disabled @name app", array('@name' => $app['name'])));
+  $next = apps_app_page_path($app);
   drupal_goto($next);
-  return '';
 }
 
 /**
- * callback for app uninstall
+ * Callback for app uninstall
  */
-function apps_app_uninstall($server_name, $app_name) {
-  $apps = apps_apps($server_name , array('machine_name' => $app_name)) ;
-  $app = $apps[$app_name];
-  $next = apps_app_page_path($app, 'configure');
+function apps_app_uninstall($app) {
+  $token_name = 'uninstall-' . $app['machine_name'];
+  if ($confirm_form = apps_display_confirm_form(t('Are you sure you want to uninstall @name?', array('@name' => $app['name'])), $token_name)) {
+    return $confirm_form;
+  }
   require_once DRUPAL_ROOT . '/includes/install.inc';
   $uninstall[] = $app['machine_name'];
   if (isset($app['demo content module']) && $app['demo content module']) {
     array_unshift($uninstall, $app['demo content module']);
   }
-  $success = drupal_uninstall_modules($uninstall);
-  if ($success) {
+
+  if (drupal_uninstall_modules($uninstall)) {
     drupal_flush_all_caches();
-    drupal_set_message("Uninstalled {$app['name']} app");
+    drupal_set_message(t("Uninstalled @name app", array('@name' => $app['name'])));
   }
   else {
-    drupal_set_message("Uninstalling {$app['name']} app failed. Please ensure all modules that depend on this module are also uninstalled", FALSE);
-  }
-  $next = apps_app_page_path($app, '');
+    drupal_set_message(t("Uninstalling @name app failed. Please ensure all modules that depend on this module are also uninstalled", array('@name' => $app['name'])));
+   }
+  $next = apps_app_page_path($app);
   drupal_goto($next);
+}
+
+
+/**
+ * Callback for app update.
+ */
+function apps_app_update($app) {
+  $token_name = 'update-' . $app['machine_name'];
+  if ($confirm_form = apps_display_confirm_form(t('Are you sure you want to update @name?', array('@name' => $app['name'])), $token_name)) {
+    return $confirm_form;
+  }
+  // Redownload apps then run any updates.
+  apps_include('installer');
+  require_once DRUPAL_ROOT . '/includes/authorize.inc';
+  $action = arg(5);
+  switch ($action) {
+    case 'updatedb';
+      drupal_set_message($_SESSION['authorize_results']['page_message']['message'], $_SESSION['authorize_results']['page_message']['type']);
+      unset($_SESSION['apps_install_next']);
+      drupal_goto(apps_app_page_path($app));
+      break;
+    case 'update':
+      $_SESSION['apps_install_next'] = apps_app_page_path($app, 'update/updatedb');
+      return apps_install_downloads();
+    default:
+      // Need to clear update cache or it'll reuse all downloads.
+      apps_clear_update_disk_cache();
+      // Adds an extra path element to avoid an endless loop. If we check for
+      // install at arg(4) we are usually there. So here we add an install at
+      // arg(5) and that will get caught in the case above ^-^
+      $_SESSION['apps_install_next'] = apps_app_page_path($app, 'update/update');
+      apps_download_apps($app);
+      break;
+  }
 }
 
 /**
  * Admin settings form for Apps.
  */
-function apps_config_form() {
+function apps_settings_form() {
   $form = array();
+  $form['apps_offline_mode'] = array(
+    '#title' => t('Apps Offline Mode'),
+    '#description' => t('Does not try to make external requests to app servers. Assumes all apps are already locally stored.'),
+    '#type' => 'checkbox',
+    '#default_value' => variable_get('apps_offline_mode', FALSE),
+  );
   $form['apps_enable_dev_console'] = array(
     '#title' => t('Enable Development Console'),
     '#description' => t('Allows local Apps to be displayed in a development app server.'),
     '#type' => 'checkbox',
-    '#default_value'=> variable_get('apps_enable_dev_console', FALSE),
+    '#default_value' => variable_get('apps_enable_dev_console', FALSE),
   );
   $form['apps_allow_voting'] = array(
     '#title' => t('Allow Voting'),
     '#description' => t('Allow users who can install apps to also rate them.  Requires that the appserver is running the appserver module.'),
     '#type' => 'checkbox',
-    '#default_value' => variable_get('apps_allow_voting', TRUE),
+    '#default_value' => variable_get('apps_allow_voting', FALSE),
   );
+  $form['apps_install_path'] = array(
+    '#title' => t('Apps Install Path'),
+    '#description' => t('For best practice, you can change the path to sites/all/modules/contrib.'),
+    '#type' => 'textfield',
+    '#default_value' => variable_get('apps_install_path', APPS_INSTALL_PATH),
+  );
+  $form['apps_grouping_mode'] = array(
+    '#title' => t('Allow Apps Grouping'),
+    '#description' => t('Allow grouping of Apps according to packages (as defined in app information via "package" key.)'),
+    '#type' => 'checkbox',
+    '#default_value'=> variable_get('apps_grouping_mode', FALSE),
+  );
+  $form['apps_grouping_vertical'] = array(
+    '#title' => t('Use vertical tabs for Apps Grouping'),
+    '#description' => t('Put the groupings into vertical tabs instead of collapsible fieldsets.'),
+    '#type' => 'checkbox',
+    '#default_value'=> variable_get('apps_grouping_vertical', TRUE),
+  );
+
   $form = system_settings_form($form);
-  $form['#submit'][] = 'apps_config_form_submit';
+  $form['#submit'][] = 'apps_settings_form_submit';
   return $form;
 }
 
@@ -295,7 +467,7 @@ function apps_config_form() {
  * Once the settings are saved, flush all caches. This will trigger the
  * Apps dev server to appear in the Apps console.
  */
-function apps_config_form_submit() {
+function apps_settings_form_submit() {
   drupal_flush_all_caches();
 }
 
@@ -303,7 +475,7 @@ function apps_config_form_submit() {
 /**
  * apps_app_status_report()
  *
- * @PARAM items: an array of items to display the keys of which should be the 
+ * @PARAM items: an array of items to display the keys of which should be the
  * keys of the $header param or use the default.
  * The default are severity, title, description and action.  Severity is expected to be
  * an int in (REQUIREMENT_INFO, REQUIREMENT_OK, REQUIREMENT_WARNING, REQUIREMENT_ERROR)
@@ -313,8 +485,7 @@ function apps_config_form_submit() {
  * @RETURN: a render array for the status report table
  */
 function apps_app_status_report($items, $header = NULL) {
-  
-  if(!isset($header)) {
+  if (!isset($header)) {
     $header = array(
       'severity' => 'Status',
       'title' => 'Title',
@@ -323,47 +494,39 @@ function apps_app_status_report($items, $header = NULL) {
     );
   }
   $rows = array();
-    $ok_image = array('#theme'=>"image", "#path" => "misc/message-24-ok.png", "#alt"=>"OK");
-    $info_image = array('#theme'=>"image", "#path" => "misc/message-24-info.png", "#alt"=>"OK");
-    $error_image = array('#theme'=>"image", "#path" => "misc/message-24-error.png", "#alt"=>"OK");
-    $warning_image = array('#theme'=>"image", "#path" => "misc/message-24-warning.png", "#alt"=>"OK");
-    //$ok_image = array('#theme'=>"image", "#path" => "misc/watchdog-ok.png", "#alt"=>"OK");
-    //$info_image = array('#theme'=>"image", "#path" => "misc/watchdog-info.png", "#alt"=>"OK");
-    //$error_image = array('#theme'=>"image", "#path" => "misc/watchdog-error.png", "#alt"=>"OK");
-    //$warning_image = array('#theme'=>"image", "#path" => "misc/watchdog-warning.png", "#alt"=>"OK");
   $severities = array(
     REQUIREMENT_INFO => array(
       'title' => t('Info'),
       'class' => 'info',
-      'image' => render($info_image),
+      'image' => array('#theme' => "image", "#path" => "misc/message-24-info.png", "#alt" => "Info"),
     ),
     REQUIREMENT_OK => array(
       'title' => t('OK'),
       'class' => 'ok',
-      'image' => render($ok_image),
+      'image' => array('#theme' => "image", "#path" => "misc/message-24-ok.png", "#alt" => "Ok"),
     ),
     REQUIREMENT_WARNING => array(
       'title' => t('Warning'),
       'class' => 'warning',
-      'image' => render($warning_image),
+      'image' => array('#theme' => "image", "#path" => "misc/message-24-warning.png", "#alt" => "Warning"),
     ),
     REQUIREMENT_ERROR => array(
       'title' => t('Error'),
       'class' => 'error',
-      'image' => render($error_image),
+      'image' => array('#theme' => "image", "#path" => "misc/message-24-error.png", "#alt" => "Error"),
     ),
   );
-  foreach($items as $item) {
+  foreach ($items as $item) {
     $row = array();
-    foreach(array_keys($header) as $key) {
-      if(isset($item[$key])) {
-        if($key =='severity') {
-          $row['data'][] = $severities[$item[$key]]['image'];
+    foreach (array_keys($header) as $key) {
+      if (isset($item[$key])) {
+        if ($key =='severity') {
+          $row['data'][] = render($severities[$item[$key]]['image']);
           $row['class'][] = $severities[$item[$key]]['class'];
         }
-        elseif($key == 'action') {
+        elseif ($key == 'action') {
           $row['data'][] = theme('item_list', array("items" => $item[$key]));
-        
+
         }
         else {
           $row['data'][] = $item[$key];
@@ -380,6 +543,13 @@ function apps_app_status_report($items, $header = NULL) {
     '#header' => $header,
     '#rows' => $rows,
   );
+}
 
-
+/**
+ * Provide development information.
+ */
+function apps_devel_load_array($type, $array) {
+  module_load_include('pages.inc', 'devel');
+  // Wth krumo, array is fine, but devel_print_object needs an object.
+  return devel_load_object($type, has_krumo() ? $array : (object) $array);
 }

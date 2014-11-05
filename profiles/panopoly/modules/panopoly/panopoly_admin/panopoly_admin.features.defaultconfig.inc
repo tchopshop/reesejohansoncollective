@@ -53,13 +53,7 @@ function panopoly_admin_defaultconfig_strongarm() {
 function panopoly_admin_defaultconfig_user_default_permissions() {
   $permissions = array();
 
-  // Exported permission: access administration menu.
-  $permissions['access administration menu'] = array(
-    'name' => 'access administration menu',
-    'roles' => array(),
-  );
-
-  // Exported permission: access administration pages.
+  // Exported permission: 'access administration pages'.
   $permissions['access administration pages'] = array(
     'name' => 'access administration pages',
     'roles' => array(
@@ -69,17 +63,18 @@ function panopoly_admin_defaultconfig_user_default_permissions() {
     'module' => 'system',
   );
 
-  // Exported permission: access content.
+  // Exported permission: 'access content'.
   $permissions['access content'] = array(
     'name' => 'access content',
     'roles' => array(
+      'administrator' => 'administrator',
       'anonymous user' => 'anonymous user',
       'authenticated user' => 'authenticated user',
     ),
     'module' => 'node',
   );
 
-  // Exported permission: access content overview.
+  // Exported permission: 'access content overview'.
   $permissions['access content overview'] = array(
     'name' => 'access content overview',
     'roles' => array(
@@ -89,7 +84,7 @@ function panopoly_admin_defaultconfig_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: access navbar.
+  // Exported permission: 'access navbar'.
   $permissions['access navbar'] = array(
     'name' => 'access navbar',
     'roles' => array(
@@ -99,7 +94,7 @@ function panopoly_admin_defaultconfig_user_default_permissions() {
     'module' => 'navbar',
   );
 
-  // Exported permission: administer menu.
+  // Exported permission: 'administer menu'.
   $permissions['administer menu'] = array(
     'name' => 'administer menu',
     'roles' => array(
@@ -109,7 +104,7 @@ function panopoly_admin_defaultconfig_user_default_permissions() {
     'module' => 'menu',
   );
 
-  // Exported permission: administer taxonomy.
+  // Exported permission: 'administer taxonomy'.
   $permissions['administer taxonomy'] = array(
     'name' => 'administer taxonomy',
     'roles' => array(
@@ -119,37 +114,7 @@ function panopoly_admin_defaultconfig_user_default_permissions() {
     'module' => 'taxonomy',
   );
 
-  // Exported permission: create files.
-  $permissions['create files'] = array(
-    'name' => 'create files',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'editor' => 'editor',
-    ),
-    'module' => 'file_entity',
-  );
-
-  // Exported permission: delete any files.
-  $permissions['delete any files'] = array(
-    'name' => 'delete any files',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'editor' => 'editor',
-    ),
-    'module' => 'file_entity',
-  );
-
-  // Exported permission: delete own files.
-  $permissions['delete own files'] = array(
-    'name' => 'delete own files',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'editor' => 'editor',
-    ),
-    'module' => 'file_entity',
-  );
-
-  // Exported permission: delete revisions.
+  // Exported permission: 'delete revisions'.
   $permissions['delete revisions'] = array(
     'name' => 'delete revisions',
     'roles' => array(
@@ -159,27 +124,7 @@ function panopoly_admin_defaultconfig_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: edit any files.
-  $permissions['edit any files'] = array(
-    'name' => 'edit any files',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'editor' => 'editor',
-    ),
-    'module' => 'file_entity',
-  );
-
-  // Exported permission: edit own files.
-  $permissions['edit own files'] = array(
-    'name' => 'edit own files',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'editor' => 'editor',
-    ),
-    'module' => 'file_entity',
-  );
-
-  // Exported permission: revert revisions.
+  // Exported permission: 'revert revisions'.
   $permissions['revert revisions'] = array(
     'name' => 'revert revisions',
     'roles' => array(
@@ -189,7 +134,7 @@ function panopoly_admin_defaultconfig_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: save draft.
+  // Exported permission: 'save draft'.
   $permissions['save draft'] = array(
     'name' => 'save draft',
     'roles' => array(
@@ -199,43 +144,7 @@ function panopoly_admin_defaultconfig_user_default_permissions() {
     'module' => 'save_draft',
   );
 
-  // Exported permission: use admin toolbar.
-  $permissions['use admin toolbar'] = array(
-    'name' => 'use admin toolbar',
-    'roles' => array(),
-  );
-
-  // Exported permission: view files.
-  $permissions['view files'] = array(
-    'name' => 'view files',
-    'roles' => array(
-      'anonymous user' => 'anonymous user',
-      'authenticated user' => 'authenticated user',
-    ),
-    'module' => 'file_entity',
-  );
-
-  // Exported permission: view own files.
-  $permissions['view own files'] = array(
-    'name' => 'view own files',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'editor' => 'editor',
-    ),
-    'module' => 'file_entity',
-  );
-
-  // Exported permission: view own private files.
-  $permissions['view own private files'] = array(
-    'name' => 'view own private files',
-    'roles' => array(
-      'administrator' => 'administrator',
-      'editor' => 'editor',
-    ),
-    'module' => 'file_entity',
-  );
-
-  // Exported permission: view own unpublished content.
+  // Exported permission: 'view own unpublished content'.
   $permissions['view own unpublished content'] = array(
     'name' => 'view own unpublished content',
     'roles' => array(
@@ -245,7 +154,7 @@ function panopoly_admin_defaultconfig_user_default_permissions() {
     'module' => 'node',
   );
 
-  // Exported permission: view revisions.
+  // Exported permission: 'view revisions'.
   $permissions['view revisions'] = array(
     'name' => 'view revisions',
     'roles' => array(

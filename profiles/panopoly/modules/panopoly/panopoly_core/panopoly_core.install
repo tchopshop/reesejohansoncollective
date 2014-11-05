@@ -8,7 +8,7 @@
 /**
  * Implementation of hook_requirements()
  * 
- * Adapdeted from system_requirements()
+ * Adapted from system_requirements()
  */
 function panopoly_core_requirements($phase) {
 
@@ -21,7 +21,7 @@ function panopoly_core_requirements($phase) {
   // Let's require more memory and force Drupal core to accept it
   $memory_limit = ini_get('memory_limit');
   $panopoly_memory_limit = '196M';
-  $requirements['php_memory_limit'] = array(
+  $requirements['panopoly_core_memory_limit'] = array(
     'title' => $t('PHP memory limit'),
     'value' => $memory_limit == -1 ? t('-1 (Unlimited)') : $memory_limit,
     'weight' => 0,
@@ -47,8 +47,8 @@ function panopoly_core_requirements($phase) {
         $description .= ' ' . $t('Contact your system administrator or hosting provider for assistance with increasing your PHP memory limit.');
       }
 
-      $requirements['php_memory_limit']['description'] = $description . ' ' . $t('See the <a href="@url">Drupal requirements</a> for more information.', array('@url' => 'http://drupal.org/requirements'));
-      $requirements['php_memory_limit']['severity'] = REQUIREMENT_WARNING;
+      $requirements['panopoly_core_memory_limit']['description'] = $description . ' ' . $t('See the <a href="@url">Drupal requirements</a> for more information.', array('@url' => 'http://drupal.org/requirements'));
+      $requirements['panopoly_core_memory_limit']['severity'] = REQUIREMENT_WARNING;
     }
   }
   return $requirements;
@@ -75,9 +75,68 @@ function panopoly_core_uninstall() {
 
 }
 
+/**
+ * Implements hook_update_dependencies().
+ */
+function panopoly_core_update_dependencies() {
+  $deps = array();
+  $deps['panopoly_core'][7002] = array(
+    'pathauto' => 7006,
+  );
+  return $deps;
+}
+
 /** 
  * Panopoly Beta 5 Update: Correctly Setting install_task to "done"
  */
 function panopoly_core_update_7001(&$sandbox) {
   variable_set('install_task', 'done');
+}
+
+/**
+ * Move pathauto state information from pathauto to pathauto_state.
+ */
+function panopoly_core_update_7002() {
+  module_load_install('pathauto');
+  if (function_exists('pathauto_update_7006')) {
+    // Call it here because it needs to be re-run if it was previously run
+    // with an older version of the patch from #936222.
+    $res = pathauto_update_7006();
+    if (db_table_exists('pathauto')) {
+      db_query("INSERT INTO {pathauto_state} (entity_type, entity_id, pathauto) SELECT entity_type, entity_id, pathauto FROM {pathauto}");
+      db_drop_table('pathauto');
+    }
+    return $res;
+  }
+}
+
+/**
+ * Remove the 'node_body' Pane from the list of allowed panes.
+ */
+function panopoly_core_update_7003() {
+  $allowed = variable_get('panels_page_allowed_types', array());
+  if (!empty($allowed['node_body-node_body'])) {
+    $allowed['node_body-node_body'] = 0;
+    variable_set('panels_page_allowed_types', $allowed);
+  }
+}
+
+/**
+ * Enable the transliteration module.
+ */
+function panopoly_core_update_7100() {
+  if (!module_exists('transliteration')) {
+    module_enable(array('transliteration'));
+  }
+}
+
+/**
+ * Change the Pathauto "Update action" to match the new default.
+ */
+function panopoly_core_update_7101() {
+  // Only change this setting if the 'redirect' module isn't used OR if it's
+  // used in conjunction with the 'globalredirect' module.
+  if (!module_exists('redirect') || module_exists('globalredirect')) {
+    variable_set('pathauto_update_action', '1');
+  }
 }
